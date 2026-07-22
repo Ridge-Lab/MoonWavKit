@@ -16,7 +16,7 @@
 - 示例：`cmd/main` 与 `examples/basic`。
 - CI：`.github/workflows/ci.yml` 覆盖检查、测试和示例运行。
 - 测试：66 个测试覆盖核心路径和错误路径。
-- Mooncakes：仓库创建并登录 Mooncakes 后执行 `moon publish --dry-run` 与 `moon publish`。
+- Mooncakes：已完成 `moon publish --dry-run` 与 `moon publish`，包名 `Ridge-Lab/moonwavkit`，版本 `0.1.0`。
 - 许可证：MIT。
 
 ## 发布前检查
