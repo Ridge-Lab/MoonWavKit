@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Synchronized README and submission notes with the published Mooncakes package status.
+
 ## 0.1.0
 
 - Initial MoonWavKit hackathon version.

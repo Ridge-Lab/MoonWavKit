@@ -9,7 +9,7 @@ MoonWavKit 是一个 MoonBit 原生 WAV 音频解析与 PCM 工具库，面向�
 - MoonBit 有效源码规模：约 4800 行，核心实现和测试均为 MoonBit。
 - 测试：66 个测试，覆盖解析、解码、统计、处理、校验、元数据、质量检查和 fixture 矩阵。
 - 示例：`cmd/main` 和 `examples/basic` 均可运行。
-- 发布：已发布到 Mooncakes，包名 `Ridge-Lab/moonwavkit`，版本 `0.1.0`。
+- 发布：已发布到 Mooncakes，包名 `Ridge-Lab/moonwavkit`，当前版本 `0.1.1`。
 - 许可证：MIT，属于 OSI 认可开源许可证。
 
 ## 支持范围
@@ -37,7 +37,7 @@ MoonWavKit 是一个 MoonBit 原生 WAV 音频解析与 PCM 工具库，面向�
 通过 Mooncakes 安装：
 
 ```bash
-moon add Ridge-Lab/moonwavkit@0.1.0
+moon add Ridge-Lab/moonwavkit@0.1.1
 ```
 
 本地开发：
