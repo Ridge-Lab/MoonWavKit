@@ -2,6 +2,7 @@
 _build/
 target/
 target
+.githooks/
 .mooncakes/
 .moonagent/
 submission/*_preview.png
