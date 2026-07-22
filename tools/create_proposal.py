@@ -61,7 +61,7 @@ def draw_wrapped(c, text, x, y, width, font="CN", size=7.6, leading=10.0, color=
 def title(c, x, y, width):
     c.setFillColor(colors.HexColor("#111827"))
     c.setFont("CNBold", 18)
-    c.drawCentredString(x + width / 2, y, "2026 MoonBit 国产基础软件生态开源大赛 8月黑客松项目申报书")
+    c.drawCentredString(x + width / 2, y, "MoonWavKit 项目申报书")
     c.setStrokeColor(colors.HexColor("#2563EB"))
     c.setLineWidth(1.1)
     c.line(x, y - 13, x + width, y - 13)
@@ -203,7 +203,7 @@ def main():
     y = section(c, "开源合规与确认", margin, y, width)
     y = draw_wrapped(
         c,
-        "本项目为原创 MoonBit 开源库，许可证为 MIT；测试 WAV fixture 均由项目代码构造，不包含来源不明的音频素材或第三方私有代码。申报材料所列目标、仓库和发布信息将随正式提交保持同步。",
+        "本项目为原创 MoonBit 开源库，许可证为 MIT；测试 WAV fixture 均由项目代码构造，不包含来源不明的音频素材或第三方私有代码。项目材料所列目标、仓库和发布信息将随正式提交保持同步。",
         margin,
         y,
         width,

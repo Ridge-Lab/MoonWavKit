@@ -1,4 +1,4 @@
-# Hackathon Submission Notes
+# Project Submission Notes
 
 ## 项目类型
 
@@ -24,6 +24,7 @@
 ```bash
 moon fmt
 moon check
+moon build
 moon test
 moon run cmd/main
 moon run examples/basic

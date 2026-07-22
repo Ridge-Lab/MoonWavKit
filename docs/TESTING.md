@@ -4,6 +4,7 @@
 
 ```bash
 moon check
+moon build
 moon test
 moon run cmd/main
 moon run cmd/main -- --json

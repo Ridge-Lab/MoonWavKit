@@ -24,6 +24,9 @@ jobs:
       - name: Check
         run: moon check
 
+      - name: Build
+        run: moon build
+
       - name: Test
         run: moon test
 

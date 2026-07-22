@@ -97,7 +97,7 @@ moon run examples/basic
 
 完整说明见 [docs/API.md](docs/API.md)。
 
-## 黑客松定位
+## 项目定位
 
 MoonWavKit 的目标是补齐 MoonBit 生态中“原生音频文件解析与 PCM 基础处理”能力。它可以作为游戏资源检查器、可视化工具、教学 demo、WASM 音频应用和自动化测试 fixture 的底层库。
 
