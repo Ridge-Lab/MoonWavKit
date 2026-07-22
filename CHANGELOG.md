@@ -1,0 +1,8 @@
+# Changelog
+
+## 0.1.0
+
+- Initial MoonWavKit hackathon version.
+- Added RIFF/WAVE parser, chunk traversal, format model, INFO and cue parsing.
+- Added PCM 8/16/24/32-bit and IEEE Float32 decode.
+- Added audio stats, waveform summary, PCM processing, quality checks, metadata helpers, conformance fixtures, CLI and basic example.
