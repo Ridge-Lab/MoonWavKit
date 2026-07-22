@@ -1,0 +1,7 @@
+import {
+  "Ridge-Lab/moonwavkit",
+}
+
+options(
+  "is-main": true,
+)
