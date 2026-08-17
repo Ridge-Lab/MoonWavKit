@@ -5,7 +5,7 @@
 - 参赛者：没巭起名
 - 联系方式：17692756613
 - GitHub 仓库链接：https://github.com/Ridge-Lab/MoonWavKit
-- Mooncakes 包：Ridge-Lab/moonwavkit@0.1.1
+- Mooncakes 包：Ridge-Lab/moonwavkit@0.1.2
 - 项目方向：MoonBit 音频文件解析基础库 / 素材质量检查工具
 - 是否为移植项目：否，原创项目
 
@@ -24,6 +24,7 @@ MoonWavKit 是一个用 MoonBit 实现的 WAV 音频文件解析与 PCM 处理�
 - 提供 `PcmBuffer` 和 `FloatBuffer` 数据结构，方便后续统计、转换和处理；
 - 提供音频信息统计，包括采样率、声道数、bit depth、帧数、时长、peak、RMS、静音样本和削波样本；
 - 提供波形摘要能力，可按 bucket 生成波形概览，便于前端显示或命令行报告；
+- 提供音频区段分析能力，识别静音段、普通信号段、响亮段和削波段，便于定位素材裁剪与过载问题；
 - 提供基础 PCM 处理工具，包括通道拆分、downmix、归一化、静音裁剪、线性重采样、混音、PCM 编码和从 FloatBuffer 构造 WAV；
 - 提供 CLI 和示例程序，可以对内置自制 WAV fixture 输出解析报告和质量摘要；
 - 提供测试用例，覆盖正常解析、错误输入、不支持格式、截断数据、元数据解析和核心处理流程；

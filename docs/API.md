@@ -57,3 +57,13 @@
 `fixture_catalog_passed()` 运行内置 fixture catalog，可作为 smoke test。
 
 `support_matrix_to_text()` 输出 v1 支持矩阵，便于 README、CLI 和验收材料复用。
+
+## Segmentation
+
+`segment_audio(buffer, options?)` 按帧识别 silence、quiet、signal、loud 和 clipping 区段，返回每段的起止帧、峰值和 RMS。
+
+`silence_regions(buffer, min_region_frames?, threshold?)` 提取连续静音区段，适合素材自动裁剪前的检查。
+
+`clipping_regions(buffer, min_region_frames?, threshold?)` 提取连续削波区段，适合 CI 中定位音频素材过载问题。
+
+`audio_segmentation_to_text(report)` 和 `region_summary_csv(report)` 输出可读报告，便于 CLI、日志和资源流水线使用。

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- Added audio segmentation analysis for silence, quiet signal, loud signal, and clipping regions.
+- Added segmentation reports, tests, and documentation.
+
 ## 0.1.1
 
 - Synchronized README and submission notes with the published Mooncakes package status.

@@ -15,8 +15,8 @@
 - README：已包含项目目标、安装方式、使用方法、示例和验收命令。
 - 示例：`cmd/main` 与 `examples/basic`。
 - CI：`.github/workflows/ci.yml` 覆盖检查、测试和示例运行。
-- 测试：66 个测试覆盖核心路径和错误路径。
-- Mooncakes：已完成 `moon publish --dry-run` 与 `moon publish`，包名 `Ridge-Lab/moonwavkit`，当前版本 `0.1.1`。
+- 测试：70 个测试覆盖核心路径和错误路径。
+- Mooncakes：包名 `Ridge-Lab/moonwavkit`，当前源码版本 `0.1.2`；提交前需执行 `moon publish` 同步发布该版本。
 - 许可证：MIT。
 
 ## 发布前检查
