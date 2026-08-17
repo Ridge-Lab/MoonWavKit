@@ -11,7 +11,7 @@
 ## 验收对应关系
 
 - MoonBit 为主要实现语言：核心解析、解码、统计、处理、校验均为 MoonBit。
-- 公开仓库：计划使用 `https://github.com/Ridge-Lab/MoonWavKit.git`。
+- 公开仓库：`https://github.com/Ridge-Lab/MoonWavKit.git`。
 - README：已包含项目目标、安装方式、使用方法、示例和验收命令。
 - 示例：`cmd/main` 与 `examples/basic`。
 - CI：`.github/workflows/ci.yml` 覆盖检查、测试和示例运行。
