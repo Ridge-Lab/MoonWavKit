@@ -1,0 +1,56 @@
+name: Bug report
+description: Report a reproducible parser, decoder, processing, or documentation defect.
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for helping improve MoonWavKit. Use synthetic input whenever possible.
+  - type: input
+    id: toolchain
+    attributes:
+      label: MoonBit toolchain
+      description: Paste the output of `moon version --all`.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - RIFF parsing
+        - PCM or Float decoding
+        - Metadata or validation
+        - Analysis or processing
+        - CLI or reports
+        - Documentation
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: Include commands, a small MoonBit snippet, and synthetic bytes or fixture name.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include the returned error code or report output.
+    validations:
+      required: true
+  - type: checkboxes
+    id: compliance
+    attributes:
+      label: Input compliance
+      options:
+        - label: I have not attached private, copyrighted, or sensitive audio data.
+          required: true

@@ -1,0 +1,34 @@
+name: Feature request
+description: Propose a focused addition within the WAV and PCM project boundary.
+title: "feature: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use case
+      description: Describe the application or workflow that needs this capability.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Proposed behavior
+      description: Describe inputs, outputs, errors, and compatibility expectations.
+    validations:
+      required: true
+  - type: textarea
+    id: boundary
+    attributes:
+      label: Project boundary
+      description: Explain why this belongs in a WAV and PCM utility library rather than a player or device layer.
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification
+      description: List fixtures, success cases, error cases, examples, and documentation needed.
+    validations:
+      required: true

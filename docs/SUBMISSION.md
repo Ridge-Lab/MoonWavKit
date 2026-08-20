@@ -16,7 +16,7 @@
 - 示例：`cmd/main` 与 `examples/basic`。
 - CI：`.github/workflows/ci.yml` 覆盖格式、全目标检查/构建/测试、覆盖率、接口一致性和示例运行。
 - 测试：72 个测试覆盖核心路径、错误路径和输入边界。
-- Mooncakes：已发布包 `Ridge-Lab/moonwavkit@0.1.2`。
+- Mooncakes：已发布包 `Ridge-Lab/moonwavkit@0.1.3`。
 - 许可证：MIT。
 
 ## 可复现验收

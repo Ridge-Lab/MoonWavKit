@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.3
+
+- Clarified runtime dependency and compatibility boundaries in the README.
+- Added architecture, invariants, complexity, and extension guidance.
+- Added issue and pull request templates for maintainable project collaboration.
+- Documented the reproducible release checklist and synchronized submission materials.
+
 ## 0.1.2
 
 - Added audio segmentation analysis for silence, quiet signal, loud signal, and clipping regions.

@@ -191,7 +191,7 @@ def main():
         c,
         [
             "GitHub 仓库公开可访问，默认分支包含完整源码和连续有效提交记录。",
-            "Mooncakes 包 Ridge-Lab/moonwavkit@0.1.2 可安装，构建状态正常。",
+            "Mooncakes 包 Ridge-Lab/moonwavkit@0.1.3 可安装，构建状态正常。",
             "API 文档、支持边界、测试记录、更新日志和重要技术说明均已纳入仓库。",
         ],
         right_x,

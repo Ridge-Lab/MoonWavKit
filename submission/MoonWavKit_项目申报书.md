@@ -5,7 +5,7 @@
 - 参赛者：没巭起名（GitHub 账号：Ridge-Lab）
 - 联系方式：17692756613
 - GitHub 仓库链接：https://github.com/Ridge-Lab/MoonWavKit
-- Mooncakes 包：Ridge-Lab/moonwavkit@0.1.2
+- Mooncakes 包：Ridge-Lab/moonwavkit@0.1.3
 - 项目方向：MoonBit 音频文件解析基础库 / 素材质量检查工具
 - 是否为移植项目：否，原创项目
 
@@ -33,7 +33,7 @@ MoonWavKit 是一个用 MoonBit 实现的 WAV 音频文件解析与 PCM 处理�
 - 提供 CLI 和示例程序，可以对内置自制 WAV fixture 输出解析报告和质量摘要；
 - 提供 72 个 MoonBit 测试，覆盖正常解析、错误输入、不支持格式、截断数据、输入边界、元数据解析和核心处理流程；
 - 配置 GitHub Actions，覆盖格式检查、全目标检查/构建/测试、覆盖率、公开接口一致性和示例运行；
-- 提供 `cmd/main` 与 `examples/basic` 两个可运行入口，并发布 Mooncakes 包 `Ridge-Lab/moonwavkit@0.1.2`。
+- 提供 `cmd/main` 与 `examples/basic` 两个可运行入口，并发布 Mooncakes 包 `Ridge-Lab/moonwavkit@0.1.3`。
 
 ## 原创、移植或参考说明
 - 本项目为原创 MoonBit 开源项目，不是移植项目；
