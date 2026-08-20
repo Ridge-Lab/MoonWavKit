@@ -5,9 +5,13 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   moonbit:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -21,14 +25,27 @@ jobs:
       - name: Show MoonBit Version
         run: moon version --all
 
-      - name: Check
-        run: moon check
+      - name: Format
+        run: moon fmt --check
 
-      - name: Build
-        run: moon build
+      - name: Check All Targets
+        run: moon check --target all --deny-warn
 
-      - name: Test
-        run: moon test
+      - name: Build All Targets
+        run: moon build --target all
+
+      - name: Test All Targets
+        run: moon test --target all --deny-warn
+
+      - name: Coverage Summary
+        run: |
+          moon test --enable-coverage
+          moon coverage report -f summary
+
+      - name: Verify Public Interfaces
+        run: |
+          moon info --target all
+          git diff --exit-code -- '*.mbti'
 
       - name: Run CLI Text
         run: moon run cmd/main

@@ -15,7 +15,7 @@ FONT_DIR = Path(r"C:\Windows\Fonts")
 TEAM = "没巭起名"
 CONTACT = "17692756613"
 GITHUB_URL = "https://github.com/Ridge-Lab/MoonWavKit.git"
-SUBMIT_DATE = "2026年7月22日"
+SUBMIT_DATE = "2026年8月20日"
 
 
 def register_fonts():
@@ -134,7 +134,7 @@ def main():
     y = section(c, "项目简介", margin, y, width)
     y = draw_wrapped(
         c,
-        "MoonWavKit 面向 MoonBit 生态补齐 WAV 音频文件处理基础能力，提供 RIFF/WAVE 结构解析、PCM/IEEE Float 解码、音频统计、波形摘要、质量检查、元数据读取和自制 fixture 验收矩阵。项目服务于游戏素材检查、音频可视化、教学实验、WebAssembly 音频工具和自动化资源流水线，不做播放器或压缩格式解码。",
+        "MoonWavKit 面向 MoonBit 生态补齐 WAV 音频文件处理基础能力，提供 RIFF/WAVE 结构解析、PCM/IEEE Float 解码、音频统计、波形与区段分析、质量检查、元数据读取和自制 fixture 验收矩阵。项目服务于游戏素材检查、音频可视化、教学实验、WebAssembly 音频工具和自动化资源流水线，区别于编码器、播放器和设备绑定。",
         margin,
         y,
         width,
@@ -153,20 +153,20 @@ def main():
             "解析 RIFF/WAVE、fmt、data、fact、LIST/INFO、cue，并保留未知 chunk 边界。",
             "解码 PCM 8/16/24/32-bit 与 IEEE Float32，输出整数 PCM 与统一 FloatBuffer。",
             "提供 peak、RMS、静音、削波、DC offset、波形 bucket、直方图、通道统计。",
-            "提供增益、归一化、静音裁剪、反转、重采样、混音、PCM 编码和 WAV 构造工具。",
+            "提供区段识别、增益、归一化、静音裁剪、反转、重采样、混音、PCM 编码和 WAV 构造工具。",
         ],
         left_x,
         left_y,
         col_w,
     )
-    right_y = section(c, "现有基础", right_x, y, col_w)
+    right_y = section(c, "工程完成情况", right_x, y, col_w)
     right_y = bullets(
         c,
         [
-            "约 4000 行有效 MoonBit 源码，核心实现不依赖外部音频库。",
-            "66 个测试覆盖解析、解码、错误路径、处理工具、质量检查和 fixture catalog。",
-            "提供 cmd/main 与 examples/basic 两个可运行入口，CI 覆盖检查、测试和示例运行。",
-            "README、API、测试说明、提交说明、MIT LICENSE 和 Mooncakes 包元信息已准备。",
+            "核心库约 4260 行 MoonBit 代码，核心实现不依赖外部音频库。",
+            "72 个测试覆盖解析、解码、错误路径、输入边界、处理工具和 fixture catalog。",
+            "提供 cmd/main 与 examples/basic 两个可运行入口，CI 覆盖全目标构建、测试和示例运行。",
+            "README、API、测试说明、MIT LICENSE、更新日志和安全策略完整。",
         ],
         right_x,
         right_y,
@@ -186,13 +186,13 @@ def main():
         left_y,
         col_w,
     )
-    right_y = section(c, "预期交付", right_x, y, col_w)
+    right_y = section(c, "工程交付", right_x, y, col_w)
     right_y = bullets(
         c,
         [
-            "公开 GitHub 仓库，提交记录清晰；如官方要求 GitLink，可再同步镜像仓库。",
-            "发布 Mooncakes 包 Ridge-Lab/moonwavkit，并保留 dry-run 与发布记录。",
-            "持续维护 API 文档、支持矩阵、更新日志和后续 WAVE_FORMAT_EXTENSIBLE 计划。",
+            "GitHub 仓库公开可访问，默认分支包含完整源码和连续有效提交记录。",
+            "Mooncakes 包 Ridge-Lab/moonwavkit@0.1.2 可安装，构建状态正常。",
+            "API 文档、支持边界、测试记录、更新日志和重要技术说明均已纳入仓库。",
         ],
         right_x,
         right_y,
@@ -203,7 +203,7 @@ def main():
     y = section(c, "开源合规与确认", margin, y, width)
     y = draw_wrapped(
         c,
-        "本项目为原创 MoonBit 开源库，许可证为 MIT；测试 WAV fixture 均由项目代码构造，不包含来源不明的音频素材或第三方私有代码。项目材料所列目标、仓库和发布信息将随正式提交保持同步。",
+        "本项目为原创 MoonBit 开源库，许可证为 MIT；测试 WAV fixture 均由项目代码构造，不包含来源不明的音频素材或第三方私有代码。项目材料、公开仓库和发布包使用一致的功能范围与版本信息。",
         margin,
         y,
         width,

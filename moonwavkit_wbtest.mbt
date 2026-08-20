@@ -31,9 +31,10 @@ test "format validation catches inconsistent block align" {
 }
 
 ///|
-test "decode options validate target channel request" {
+test "decode options reject unsupported raw float output" {
   assert_true(DecodeOptions::new().is_valid())
   assert_true(DecodeOptions::new(target_channels=2).is_valid())
+  assert_false(DecodeOptions::new(normalize=false).is_valid())
   assert_false(DecodeOptions::new(target_channels=-1).is_valid())
 }
 

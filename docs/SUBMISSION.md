@@ -14,19 +14,19 @@
 - 公开仓库：`https://github.com/Ridge-Lab/MoonWavKit.git`。
 - README：已包含项目目标、安装方式、使用方法、示例和验收命令。
 - 示例：`cmd/main` 与 `examples/basic`。
-- CI：`.github/workflows/ci.yml` 覆盖检查、测试和示例运行。
-- 测试：70 个测试覆盖核心路径和错误路径。
-- Mooncakes：包名 `Ridge-Lab/moonwavkit`，当前源码版本 `0.1.2`；提交前需执行 `moon publish` 同步发布该版本。
+- CI：`.github/workflows/ci.yml` 覆盖格式、全目标检查/构建/测试、覆盖率、接口一致性和示例运行。
+- 测试：72 个测试覆盖核心路径、错误路径和输入边界。
+- Mooncakes：已发布包 `Ridge-Lab/moonwavkit@0.1.2`。
 - 许可证：MIT。
 
-## 发布前检查
+## 可复现验收
 
 ```bash
-moon fmt
-moon check
+moon fmt --check
+moon check --deny-warn
 moon build
-moon test
+moon test --deny-warn
 moon run cmd/main
+moon run cmd/main -- --json
 moon run examples/basic
-moon publish --dry-run
 ```

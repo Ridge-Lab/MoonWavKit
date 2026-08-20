@@ -134,6 +134,25 @@ pub fn decode_pcm(
     DecodeResult::failure(
       WavError::new(ErrorInvalidFormat, "parsed wav is incomplete"),
     )
+  } else if options.target_channels != 0 &&
+    options.target_channels != wav.format.channels {
+    DecodeResult::failure(
+      WavError::new(
+        ErrorInvalidArgument,
+        "decode does not perform channel conversion; use zero or source channels",
+      ),
+    )
+  } else if wav.data_offset < 0 ||
+    wav.data_size < 0 ||
+    wav.data_offset > bytes.length() ||
+    wav.data_size > bytes.length() - wav.data_offset {
+    DecodeResult::failure(
+      WavError::new(
+        ErrorTruncatedData,
+        "data chunk extends beyond the provided byte array",
+        offset=wav.data_offset,
+      ),
+    )
   } else if !wav.format.is_supported() {
     DecodeResult::failure(
       WavError::new(ErrorUnsupportedFormat, "unsupported WAV sample format"),

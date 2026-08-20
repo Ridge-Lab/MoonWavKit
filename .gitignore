@@ -5,4 +5,6 @@ target
 .githooks/
 .mooncakes/
 .moonagent/
+bisect.coverage
+tmp/
 submission/*_preview.png

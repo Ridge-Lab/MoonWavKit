@@ -4,12 +4,13 @@ MoonWavKit 是一个 MoonBit 原生 WAV 音频解析与 PCM 工具库，面向�
 
 它不是播放器，也不依赖外部音频库；v0.1.2 聚焦 RIFF/WAVE 结构解析、PCM/Float 解码、音频统计、波形摘要、区段分析、质量检查、内置 fixture 验收矩阵和可复现示例。
 
-## 项目状态
+## 发布与质量
 
-- MoonBit 有效源码规模：约 5000 行，核心实现和测试均为 MoonBit。
-- 测试：70 个测试，覆盖解析、解码、统计、处理、校验、元数据、区段分析、质量检查和 fixture 矩阵。
+- MoonBit 源码规模：核心库约 4260 行；连同测试、CLI 和示例共约 5170 行。
+- 测试：72 个测试，覆盖解析、解码、统计、处理、校验、元数据、区段分析、质量检查和 fixture 矩阵。
 - 示例：`cmd/main` 和 `examples/basic` 均可运行。
-- 发布：包名 `Ridge-Lab/moonwavkit`，当前源码版本 `0.1.2`。
+- CI：覆盖格式检查、全目标检查/构建/测试、覆盖率摘要、公开接口一致性和示例运行。
+- 发布：Mooncakes 包 `Ridge-Lab/moonwavkit@0.1.2`。
 - 许可证：MIT，属于 OSI 认可开源许可证。
 
 ## 支持范围
@@ -32,6 +33,19 @@ MoonWavKit 是一个 MoonBit 原生 WAV 音频解析与 PCM 工具库，面向�
 - MP3、AAC、FLAC、OGG 等压缩格式解码。
 - WAV 播放器、实时音频设备、复杂 DSP 合成引擎。
 - WAVE_FORMAT_EXTENSIBLE 的完整 channel mask/subformat 解析。
+
+解码始终生成归一化 `FloatBuffer`。`DecodeOptions.target_channels` 只接受 `0`（保留源声道）或与源文件相同的声道数；声道转换请显式调用 `downmix_to_mono` 等处理 API，不会被静默执行。
+
+## 兼容性
+
+- 已验证工具链：MoonBit `0.10.8` / `moon 0.1.20260814`。
+- 默认目标：`wasm-gc`；核心包通过 `wasm`、`wasm-gc`、`js`、`native` 全目标检查。
+- Phaser、浏览器音频 API 和系统音频设备均不是运行依赖。
+- 输入由调用方以 `Array[Int]` 提供，库不负责文件系统读取或流式解码。
+
+## 生态差异
+
+MoonBit 生态已有的相近包主要覆盖 WAV/OGG 编码、原生音频播放或设备绑定、DSP 引擎和音乐中间表示。MoonWavKit 不重复这些职责，专注可跨 Wasm/JavaScript/Native 使用的 RIFF/WAVE 输入链路：结构解析、PCM 解码、元数据、格式校验、波形与区段分析、质量报告及可复现 fixture。它既可以独立用于资源 CI，也可以作为播放器、游戏引擎和可视化工具的前置处理层。
 
 ## 安装
 
@@ -96,6 +110,7 @@ moon run examples/basic
 | 区段分析 | `segment_audio`, `silence_regions`, `clipping_regions`, `audio_segmentation_to_text` |
 | 质量 | `inspect_audio_quality`, `quality_profile_to_text`, `recommended_quality_action` |
 | 验收 | `fixture_catalog`, `run_fixture_catalog`, `fixture_catalog_passed`, `support_matrix_to_text` |
+| 报告 | `build_report`, `validation_report_to_text`, `quality_profile_to_text`, `region_summary_csv` |
 
 完整说明见 [docs/API.md](docs/API.md)。
 
@@ -104,3 +119,5 @@ moon run examples/basic
 MoonWavKit 的目标是补齐 MoonBit 生态中“原生音频文件解析与 PCM 基础处理”能力。它可以作为游戏资源检查器、可视化工具、教学 demo、WASM 音频应用和自动化测试 fixture 的底层库。
 
 本项目为原创 MoonBit 开源库；自带 WAV fixture 均由代码生成，不包含第三方音频素材。
+
+安全边界和漏洞报告方式见 [SECURITY.md](SECURITY.md)，参与开发规范见 [CONTRIBUTING.md](CONTRIBUTING.md)。

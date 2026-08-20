@@ -4,6 +4,8 @@
 
 - Added audio segmentation analysis for silence, quiet signal, loud signal, and clipping regions.
 - Added segmentation reports, tests, and documentation.
+- Hardened decode option validation and byte-array bounds checks.
+- Expanded strict multi-target CI, coverage reporting, public interface checks, and final acceptance documentation.
 
 ## 0.1.1
 

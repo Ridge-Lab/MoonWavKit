@@ -16,6 +16,8 @@ pub fn apply_gain(FloatBuffer, Double) -> FloatBuffer
 
 pub fn audio_fingerprint(FloatBuffer) -> AudioFingerprint
 
+pub fn audio_segmentation_to_text(AudioSegmentation) -> String
+
 pub fn buffers_are_close(FloatBuffer, FloatBuffer, tolerance? : Double) -> Bool
 
 pub fn build_report(Array[Int]) -> WavReport
@@ -27,6 +29,8 @@ pub fn channel_stats(FloatBuffer, silence_threshold? : Double, clip_threshold? :
 pub fn chunk_table_to_text(ParsedWav) -> String
 
 pub fn clamp_buffer(FloatBuffer) -> FloatBuffer
+
+pub fn clipping_regions(FloatBuffer, min_region_frames? : Int, threshold? : Double) -> Array[AudioRegion]
 
 pub fn collect_cue_timeline(ParsedWav) -> CueTimeline
 
@@ -126,6 +130,8 @@ pub fn quality_profile_to_text(QualityProfile) -> String
 
 pub fn recommended_quality_action(QualityProfile) -> String
 
+pub fn region_summary_csv(AudioSegmentation) -> String
+
 pub fn render_waveform_text(FloatBuffer, points? : Int, width? : Int) -> String
 
 pub fn resample_linear(FloatBuffer, Int) -> ResampleResult
@@ -135,6 +141,10 @@ pub fn reverse_audio(FloatBuffer) -> FloatBuffer
 pub fn run_fixture_case(FixtureCase) -> FixtureCaseResult
 
 pub fn run_fixture_catalog() -> Array[FixtureCaseResult]
+
+pub fn segment_audio(FloatBuffer, options? : AudioSegmentOptions) -> AudioSegmentation
+
+pub fn silence_regions(FloatBuffer, min_region_frames? : Int, threshold? : Double) -> Array[AudioRegion]
 
 pub fn slice_seconds(FloatBuffer, Double, Double) -> FloatBuffer
 
@@ -195,6 +205,57 @@ pub(all) struct AudioFingerprint {
   checksum : Int
 } derive(Eq, @debug.Debug)
 pub fn AudioFingerprint::empty() -> Self
+
+pub(all) struct AudioRegion {
+  kind : AudioRegionKind
+  start_frame : Int
+  frame_count : Int
+  channels : Int
+  sample_rate : Int
+  peak : Double
+  rms : Double
+} derive(Eq, @debug.Debug)
+pub fn AudioRegion::contains_frame(Self, Int) -> Bool
+pub fn AudioRegion::duration_seconds(Self) -> Double
+pub fn AudioRegion::empty(AudioRegionKind) -> Self
+pub fn AudioRegion::end_frame(Self) -> Int
+pub fn AudioRegion::is_valid(Self) -> Bool
+
+pub(all) enum AudioRegionKind {
+  RegionSilence
+  RegionQuiet
+  RegionSignal
+  RegionLoud
+  RegionClipping
+} derive(Eq, @debug.Debug)
+pub fn AudioRegionKind::is_problem(Self) -> Bool
+pub fn AudioRegionKind::label(Self) -> String
+
+pub(all) struct AudioSegmentOptions {
+  silence_threshold : Double
+  quiet_threshold : Double
+  loud_threshold : Double
+  clipping_threshold : Double
+  min_region_frames : Int
+} derive(Eq, @debug.Debug)
+pub fn AudioSegmentOptions::default() -> Self
+pub fn AudioSegmentOptions::game_asset() -> Self
+pub fn AudioSegmentOptions::with_min_region_frames(Self, Int) -> Self
+
+pub(all) struct AudioSegmentation {
+  ok : Bool
+  regions : Array[AudioRegion]
+  source_frames : Int
+  channels : Int
+  sample_rate : Int
+} derive(Eq, @debug.Debug)
+pub fn AudioSegmentation::coverage_ratio(Self, AudioRegionKind) -> Double
+pub fn AudioSegmentation::empty() -> Self
+pub fn AudioSegmentation::frames_for_kind(Self, AudioRegionKind) -> Int
+pub fn AudioSegmentation::longest_region(Self) -> AudioRegion
+pub fn AudioSegmentation::longest_region_of_kind(Self, AudioRegionKind) -> AudioRegion
+pub fn AudioSegmentation::problem_count(Self) -> Int
+pub fn AudioSegmentation::region_count(Self) -> Int
 
 pub(all) struct AudioStats {
   duration_seconds : Double
@@ -704,4 +765,3 @@ pub fn WaveformSummary::is_valid(Self) -> Bool
 // Type aliases
 
 // Traits
-

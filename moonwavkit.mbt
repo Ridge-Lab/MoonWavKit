@@ -581,7 +581,9 @@ pub fn DecodeOptions::new(
 
 ///|
 pub fn DecodeOptions::is_valid(self : DecodeOptions) -> Bool {
-  self.target_channels >= 0
+  // v0.1 always exposes normalized floating-point samples. Keep the field in
+  // the public model for compatibility, but reject unsupported raw output.
+  self.normalize && self.target_channels >= 0
 }
 
 ///|

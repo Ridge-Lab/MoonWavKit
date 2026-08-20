@@ -153,3 +153,27 @@ test "report renders text and json smoke output" {
   assert_true(text.contains("MoonWavKit report"))
   assert_true(json.contains("\"ok\": true"))
 }
+
+///|
+test "decode rejects unavailable channel conversion" {
+  let bytes = @moonwavkit.fixture_pcm16_mono()
+  let parsed = @moonwavkit.parse_wav(bytes)
+  assert_true(parsed.ok)
+  let decoded = @moonwavkit.decode_pcm(
+    bytes,
+    parsed.wav,
+    options=@moonwavkit.DecodeOptions::new(target_channels=2),
+  )
+  assert_false(decoded.ok)
+  assert_eq(decoded.error.kind, @moonwavkit.ErrorInvalidArgument)
+}
+
+///|
+test "decode validates provided bytes against parsed data bounds" {
+  let bytes = @moonwavkit.fixture_pcm16_mono()
+  let parsed = @moonwavkit.parse_wav(bytes)
+  assert_true(parsed.ok)
+  let decoded = @moonwavkit.decode_pcm([], parsed.wav)
+  assert_false(decoded.ok)
+  assert_eq(decoded.error.kind, @moonwavkit.ErrorTruncatedData)
+}
