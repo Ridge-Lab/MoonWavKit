@@ -1,4 +1,5 @@
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) enum QualityFindingKind {
   QualityOk
   QualityClipping
@@ -7,7 +8,7 @@ pub(all) enum QualityFindingKind {
   QualityDcOffset
   QualityHighCrest
   QualityHighZeroCrossing
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn QualityFindingKind::label(self : QualityFindingKind) -> String {
@@ -23,32 +24,34 @@ pub fn QualityFindingKind::label(self : QualityFindingKind) -> String {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct QualityFinding {
   kind : QualityFindingKind
   severity : ValidationSeverity
   message : String
   value : Double
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn QualityFinding::new(
   kind : QualityFindingKind,
   severity : ValidationSeverity,
   message : String,
-  value? : Double = 0.0,
+  value~ : Double = 0.0,
 ) -> QualityFinding {
-  { kind, severity, message, value }
+  { kind, severity, message, value, }
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct QualityProfile {
   ok : Bool
-  score : Int
+  score : Int32
   stats : AudioStats
   crest_factor : Double
   zero_crossing_rate : Double
   findings : Array[QualityFinding]
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn QualityProfile::empty() -> QualityProfile {
@@ -74,7 +77,7 @@ pub fn QualityProfile::has_warnings(self : QualityProfile) -> Bool {
 }
 
 ///|
-fn quality_penalty(finding : QualityFinding) -> Int {
+fn quality_penalty(finding : QualityFinding) -> Int32 {
   match finding.kind {
     QualityOk => 0
     QualityClipping => 30
@@ -87,7 +90,7 @@ fn quality_penalty(finding : QualityFinding) -> Int {
 }
 
 ///|
-fn final_quality_score(findings : Array[QualityFinding]) -> Int {
+fn final_quality_score(findings : Array[QualityFinding]) -> Int32 {
   let penalty = for finding in findings; value = 0 {
     continue value + quality_penalty(finding)
   } nobreak {

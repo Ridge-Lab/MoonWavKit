@@ -17,6 +17,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
       - name: Install MoonBit
         run: |
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
@@ -47,11 +51,17 @@ jobs:
           moon info --target all
           git diff --exit-code -- '*.mbti'
 
-      - name: Run CLI Text
-        run: moon run cmd/main
-
-      - name: Run CLI JSON
-        run: moon run cmd/main -- --json
-
-      - name: Run Basic Example
-        run: moon run examples/basic
+      - name: Verify CLI reports and the public API example
+        shell: bash
+        run: |
+          set -euo pipefail
+          for backend in wasm wasm-gc js native; do
+            moon run cmd/main --target "$backend" | tee "$RUNNER_TEMP/cli-text.txt"
+            grep -Fx 'status: PASS' "$RUNNER_TEMP/cli-text.txt"
+            moon run cmd/main --target "$backend" -- --json | jq -e '
+              .ok == true and .encoding == "pcm" and .channels == 1 and
+              .sample_rate == 8000 and .bits_per_sample == 16 and .frames == 4'
+            moon run examples/basic --target "$backend" | tee "$RUNNER_TEMP/basic.txt"
+            grep -Fx 'frames=4' "$RUNNER_TEMP/basic.txt"
+            grep -Fx 'fixture_catalog_passed=true' "$RUNNER_TEMP/basic.txt"
+          done

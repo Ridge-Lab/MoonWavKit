@@ -6,7 +6,7 @@ import {
 }
 
 // Values
-pub fn amplitude_histogram(FloatBuffer, Int) -> AmplitudeHistogram
+pub fn amplitude_histogram(FloatBuffer, Int32) -> AmplitudeHistogram
 
 pub fn analyze_audio(FloatBuffer) -> AudioStats
 
@@ -20,7 +20,7 @@ pub fn audio_segmentation_to_text(AudioSegmentation) -> String
 
 pub fn buffers_are_close(FloatBuffer, FloatBuffer, tolerance? : Double) -> Bool
 
-pub fn build_report(Array[Int]) -> WavReport
+pub fn build_report(Array[Int32]) -> WavReport
 
 pub fn build_wav_from_float(FloatBuffer, encoding? : PcmEncoding) -> ByteEncodeResult
 
@@ -30,7 +30,7 @@ pub fn chunk_table_to_text(ParsedWav) -> String
 
 pub fn clamp_buffer(FloatBuffer) -> FloatBuffer
 
-pub fn clipping_regions(FloatBuffer, min_region_frames? : Int, threshold? : Double) -> Array[AudioRegion]
+pub fn clipping_regions(FloatBuffer, min_region_frames? : Int32, threshold? : Double) -> Array[AudioRegion]
 
 pub fn collect_cue_timeline(ParsedWav) -> CueTimeline
 
@@ -42,27 +42,27 @@ pub fn comparison_to_text(BufferComparison) -> String
 
 pub fn crest_factor(FloatBuffer) -> Double
 
-pub fn cue_sample_offsets(ParsedWav) -> Array[Int]
+pub fn cue_sample_offsets(ParsedWav) -> Array[Int32]
 
 pub fn cue_timeline_to_text(CueTimeline) -> String
 
 pub fn cue_times_seconds(ParsedWav) -> Array[Double]
 
-pub fn decode_pcm(Array[Int], ParsedWav, options? : DecodeOptions) -> DecodeResult
+pub fn decode_pcm(Array[Int32], ParsedWav, options? : DecodeOptions) -> DecodeResult
 
 pub fn describe_wav(ParsedWav) -> String
 
-pub fn detect_silence_regions(FloatBuffer, Int, threshold? : Double) -> Array[WaveChunk]
+pub fn detect_silence_regions(FloatBuffer, Int32, threshold? : Double) -> Array[WaveChunk]
 
-pub fn detect_silence_sample_regions(FloatBuffer, Int, threshold? : Double) -> Array[SampleRegion]
+pub fn detect_silence_sample_regions(FloatBuffer, Int32, threshold? : Double) -> Array[SampleRegion]
 
 pub fn downmix_to_mono(FloatBuffer) -> FloatBuffer
 
 pub fn encode_float_to_pcm_bytes(FloatBuffer, PcmEncoding) -> ByteEncodeResult
 
-pub fn encoding_from_code(Int) -> WaveEncoding
+pub fn encoding_from_code(Int32) -> WaveEncoding
 
-pub fn find_clipping_regions(FloatBuffer, min_run? : Int, threshold? : Double) -> Array[SampleRegion]
+pub fn find_clipping_regions(FloatBuffer, min_run? : Int32, threshold? : Double) -> Array[SampleRegion]
 
 pub fn fixture_catalog() -> Array[FixtureCase]
 
@@ -70,39 +70,39 @@ pub fn fixture_catalog_passed() -> Bool
 
 pub fn fixture_catalog_report() -> String
 
-pub fn fixture_float32_mono() -> Array[Int]
+pub fn fixture_float32_mono() -> Array[Int32]
 
-pub fn fixture_low_sample_rate() -> Array[Int]
+pub fn fixture_low_sample_rate() -> Array[Int32]
 
-pub fn fixture_missing_data() -> Array[Int]
+pub fn fixture_missing_data() -> Array[Int32]
 
-pub fn fixture_not_riff() -> Array[Int]
+pub fn fixture_not_riff() -> Array[Int32]
 
-pub fn fixture_pcm16_mono() -> Array[Int]
+pub fn fixture_pcm16_mono() -> Array[Int32]
 
-pub fn fixture_pcm24_mono() -> Array[Int]
+pub fn fixture_pcm24_mono() -> Array[Int32]
 
-pub fn fixture_pcm32_mono() -> Array[Int]
+pub fn fixture_pcm32_mono() -> Array[Int32]
 
-pub fn fixture_pcm8_stereo() -> Array[Int]
+pub fn fixture_pcm8_stereo() -> Array[Int32]
 
-pub fn fixture_quality_clipped() -> Array[Int]
+pub fn fixture_quality_clipped() -> Array[Int32]
 
-pub fn fixture_riff_size_mismatch() -> Array[Int]
+pub fn fixture_riff_size_mismatch() -> Array[Int32]
 
-pub fn fixture_stereo_phase_test() -> Array[Int]
+pub fn fixture_stereo_phase_test() -> Array[Int32]
 
-pub fn fixture_tiny_silence() -> Array[Int]
+pub fn fixture_tiny_silence() -> Array[Int32]
 
-pub fn fixture_truncated_data() -> Array[Int]
+pub fn fixture_truncated_data() -> Array[Int32]
 
-pub fn fixture_unsupported_alaw() -> Array[Int]
+pub fn fixture_unsupported_alaw() -> Array[Int32]
 
-pub fn fixture_with_info_and_cue() -> Array[Int]
+pub fn fixture_with_info_and_cue() -> Array[Int32]
 
-pub fn fixture_with_unknown_chunk() -> Array[Int]
+pub fn fixture_with_unknown_chunk() -> Array[Int32]
 
-pub fn frame_slice(FloatBuffer, Int, Int) -> FloatBuffer
+pub fn frame_slice(FloatBuffer, Int32, Int32) -> FloatBuffer
 
 pub fn has_info_tag(ParsedWav, String) -> Bool
 
@@ -110,21 +110,21 @@ pub fn info_tag_value(ParsedWav, String) -> String?
 
 pub fn inspect_audio_quality(FloatBuffer) -> QualityProfile
 
-pub fn loop_region(FloatBuffer, Int, Int, Int) -> LoopResult
+pub fn loop_region(FloatBuffer, Int32, Int32, Int32) -> LoopResult
 
-pub fn make_silence(Int, Int, Int) -> FloatBuffer
+pub fn make_silence(Int32, Int32, Int32) -> FloatBuffer
 
 pub fn mix_buffers(FloatBuffer, FloatBuffer, gain_a? : Double, gain_b? : Double) -> BufferMixResult
 
 pub fn normalize_peak(FloatBuffer, target_peak? : Double) -> NormalizeReport
 
-pub fn pad_buffer(FloatBuffer, left_frames? : Int, right_frames? : Int) -> FloatBuffer
+pub fn pad_buffer(FloatBuffer, left_frames? : Int32, right_frames? : Int32) -> FloatBuffer
 
-pub fn parse_and_decode(Array[Int], options? : DecodeOptions) -> DecodeResult
+pub fn parse_and_decode(Array[Int32], options? : DecodeOptions) -> DecodeResult
 
-pub fn parse_and_describe(Array[Int]) -> String
+pub fn parse_and_describe(Array[Int32]) -> String
 
-pub fn parse_wav(Array[Int]) -> WavParseResult
+pub fn parse_wav(Array[Int32]) -> WavParseResult
 
 pub fn quality_profile_to_text(QualityProfile) -> String
 
@@ -132,9 +132,9 @@ pub fn recommended_quality_action(QualityProfile) -> String
 
 pub fn region_summary_csv(AudioSegmentation) -> String
 
-pub fn render_waveform_text(FloatBuffer, points? : Int, width? : Int) -> String
+pub fn render_waveform_text(FloatBuffer, points? : Int32, width? : Int32) -> String
 
-pub fn resample_linear(FloatBuffer, Int) -> ResampleResult
+pub fn resample_linear(FloatBuffer, Int32) -> ResampleResult
 
 pub fn reverse_audio(FloatBuffer) -> FloatBuffer
 
@@ -144,324 +144,433 @@ pub fn run_fixture_catalog() -> Array[FixtureCaseResult]
 
 pub fn segment_audio(FloatBuffer, options? : AudioSegmentOptions) -> AudioSegmentation
 
-pub fn silence_regions(FloatBuffer, min_region_frames? : Int, threshold? : Double) -> Array[AudioRegion]
+pub fn silence_regions(FloatBuffer, min_region_frames? : Int32, threshold? : Double) -> Array[AudioRegion]
 
 pub fn slice_seconds(FloatBuffer, Double, Double) -> FloatBuffer
 
-pub fn split_channel(FloatBuffer, Int) -> Array[Double]
+pub fn split_channel(FloatBuffer, Int32) -> Array[Double]
 
 pub fn stats_quality_label(AudioStats) -> String
 
 pub fn summarize_format(ParsedWav) -> FormatSummary
 
-pub fn summarize_waveform(FloatBuffer, Int) -> WaveformSummary
+pub fn summarize_waveform(FloatBuffer, Int32) -> WaveformSummary
 
 pub fn support_matrix_to_text() -> String
 
 pub fn supported_format_matrix() -> Array[SupportEntry]
 
-pub fn trim_silence(FloatBuffer, threshold? : Double, keep_frames? : Int) -> TrimResult
+pub fn trim_silence(FloatBuffer, threshold? : Double, keep_frames? : Int32) -> TrimResult
 
-pub fn validate_wav(Array[Int]) -> WavError
+pub fn validate_wav(Array[Int32]) -> WavError
 
-pub fn validate_wav_detailed(Array[Int]) -> ValidationReport
+pub fn validate_wav_detailed(Array[Int32]) -> ValidationReport
 
 pub fn validation_report_to_text(ValidationReport) -> String
 
-pub fn waveform_points(FloatBuffer, Int) -> Array[WaveformPoint]
+pub fn waveform_points(FloatBuffer, Int32) -> Array[WaveformPoint]
 
 pub fn wavinfo_fixture_report(format? : ReportFormat) -> String
 
-pub fn zero_crossing_count(FloatBuffer) -> Int
+pub fn zero_crossing_count(FloatBuffer) -> Int32
 
 pub fn zero_crossing_rate(FloatBuffer) -> Double
 
 // Errors
 
 // Types and methods
+#derive(Eq, @debug.Debug)
 pub(all) struct AmplitudeBin {
-  index : Int
+  index : Int32
   lower : Double
   upper : Double
-  count : Int
-} derive(Eq, @debug.Debug)
-pub fn AmplitudeBin::empty(Int) -> Self
+  count : Int32
+}
+pub fn AmplitudeBin::empty(Int32) -> Self
+pub fn AmplitudeBin::equal(Self, Self) -> Bool
+pub fn AmplitudeBin::not_equal(Self, Self) -> Bool
+pub fn AmplitudeBin::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct AmplitudeHistogram {
   bins : Array[AmplitudeBin]
-  sample_count : Int
-  bin_count : Int
-} derive(Eq, @debug.Debug)
+  sample_count : Int32
+  bin_count : Int32
+}
 pub fn AmplitudeHistogram::empty() -> Self
+pub fn AmplitudeHistogram::equal(Self, Self) -> Bool
 pub fn AmplitudeHistogram::is_valid(Self) -> Bool
+pub fn AmplitudeHistogram::not_equal(Self, Self) -> Bool
+pub fn AmplitudeHistogram::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct AudioFingerprint {
-  frame_count : Int
-  sample_rate : Int
-  channels : Int
-  peak_milli : Int
-  rms_milli : Int
-  zero_crossings : Int
-  checksum : Int
-} derive(Eq, @debug.Debug)
+  frame_count : Int32
+  sample_rate : Int32
+  channels : Int32
+  peak_milli : Int32
+  rms_milli : Int32
+  zero_crossings : Int32
+  checksum : Int32
+}
 pub fn AudioFingerprint::empty() -> Self
+pub fn AudioFingerprint::equal(Self, Self) -> Bool
+pub fn AudioFingerprint::not_equal(Self, Self) -> Bool
+pub fn AudioFingerprint::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct AudioRegion {
   kind : AudioRegionKind
-  start_frame : Int
-  frame_count : Int
-  channels : Int
-  sample_rate : Int
+  start_frame : Int32
+  frame_count : Int32
+  channels : Int32
+  sample_rate : Int32
   peak : Double
   rms : Double
-} derive(Eq, @debug.Debug)
-pub fn AudioRegion::contains_frame(Self, Int) -> Bool
+}
+pub fn AudioRegion::contains_frame(Self, Int32) -> Bool
 pub fn AudioRegion::duration_seconds(Self) -> Double
 pub fn AudioRegion::empty(AudioRegionKind) -> Self
-pub fn AudioRegion::end_frame(Self) -> Int
+pub fn AudioRegion::end_frame(Self) -> Int32
+pub fn AudioRegion::equal(Self, Self) -> Bool
 pub fn AudioRegion::is_valid(Self) -> Bool
+pub fn AudioRegion::not_equal(Self, Self) -> Bool
+pub fn AudioRegion::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum AudioRegionKind {
   RegionSilence
   RegionQuiet
   RegionSignal
   RegionLoud
   RegionClipping
-} derive(Eq, @debug.Debug)
+}
+pub fn AudioRegionKind::equal(Self, Self) -> Bool
 pub fn AudioRegionKind::is_problem(Self) -> Bool
 pub fn AudioRegionKind::label(Self) -> String
+pub fn AudioRegionKind::not_equal(Self, Self) -> Bool
+pub fn AudioRegionKind::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct AudioSegmentOptions {
   silence_threshold : Double
   quiet_threshold : Double
   loud_threshold : Double
   clipping_threshold : Double
-  min_region_frames : Int
-} derive(Eq, @debug.Debug)
+  min_region_frames : Int32
+}
 pub fn AudioSegmentOptions::default() -> Self
+pub fn AudioSegmentOptions::equal(Self, Self) -> Bool
 pub fn AudioSegmentOptions::game_asset() -> Self
-pub fn AudioSegmentOptions::with_min_region_frames(Self, Int) -> Self
+pub fn AudioSegmentOptions::not_equal(Self, Self) -> Bool
+pub fn AudioSegmentOptions::to_repr(Self) -> @debug.Repr
+pub fn AudioSegmentOptions::with_min_region_frames(Self, Int32) -> Self
 
+#derive(Eq, @debug.Debug)
 pub(all) struct AudioSegmentation {
   ok : Bool
   regions : Array[AudioRegion]
-  source_frames : Int
-  channels : Int
-  sample_rate : Int
-} derive(Eq, @debug.Debug)
+  source_frames : Int32
+  channels : Int32
+  sample_rate : Int32
+}
 pub fn AudioSegmentation::coverage_ratio(Self, AudioRegionKind) -> Double
 pub fn AudioSegmentation::empty() -> Self
-pub fn AudioSegmentation::frames_for_kind(Self, AudioRegionKind) -> Int
+pub fn AudioSegmentation::equal(Self, Self) -> Bool
+pub fn AudioSegmentation::frames_for_kind(Self, AudioRegionKind) -> Int32
 pub fn AudioSegmentation::longest_region(Self) -> AudioRegion
 pub fn AudioSegmentation::longest_region_of_kind(Self, AudioRegionKind) -> AudioRegion
-pub fn AudioSegmentation::problem_count(Self) -> Int
-pub fn AudioSegmentation::region_count(Self) -> Int
+pub fn AudioSegmentation::not_equal(Self, Self) -> Bool
+pub fn AudioSegmentation::problem_count(Self) -> Int32
+pub fn AudioSegmentation::region_count(Self) -> Int32
+pub fn AudioSegmentation::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct AudioStats {
   duration_seconds : Double
-  frame_count : Int
-  sample_count : Int
+  frame_count : Int32
+  sample_count : Int32
   peak : Double
   rms : Double
-  silent_samples : Int
-  clipped_samples : Int
+  silent_samples : Int32
+  clipped_samples : Int32
   dc_offset : Double
-} derive(Eq, @debug.Debug)
+}
 pub fn AudioStats::empty() -> Self
+pub fn AudioStats::equal(Self, Self) -> Bool
 pub fn AudioStats::has_clipping(Self) -> Bool
+pub fn AudioStats::not_equal(Self, Self) -> Bool
 pub fn AudioStats::silence_ratio(Self) -> Double
+pub fn AudioStats::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct BufferComparison {
   comparable : Bool
-  sample_count : Int
+  sample_count : Int32
   max_abs_error : Double
   mean_abs_error : Double
   equal_with_tolerance : Bool
   error : WavError
-} derive(Eq, @debug.Debug)
+}
+pub fn BufferComparison::equal(Self, Self) -> Bool
 pub fn BufferComparison::failure(WavError) -> Self
-pub fn BufferComparison::success(Int, Double, Double, Bool) -> Self
+pub fn BufferComparison::not_equal(Self, Self) -> Bool
+pub fn BufferComparison::success(Int32, Double, Double, Bool) -> Self
+pub fn BufferComparison::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct BufferMixResult {
   ok : Bool
-  mixed_frames : Int
+  mixed_frames : Int32
   buffer : FloatBuffer
   error : WavError
-} derive(Eq, @debug.Debug)
+}
+pub fn BufferMixResult::equal(Self, Self) -> Bool
 pub fn BufferMixResult::failure(WavError) -> Self
+pub fn BufferMixResult::not_equal(Self, Self) -> Bool
 pub fn BufferMixResult::success(FloatBuffer) -> Self
+pub fn BufferMixResult::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct ByteEncodeResult {
   ok : Bool
   encoding : PcmEncoding
-  bytes : Array[Int]
+  bytes : Array[Int32]
   error : WavError
-} derive(Eq, @debug.Debug)
+}
+pub fn ByteEncodeResult::equal(Self, Self) -> Bool
 pub fn ByteEncodeResult::failure(PcmEncoding, WavError) -> Self
-pub fn ByteEncodeResult::success(PcmEncoding, Array[Int]) -> Self
+pub fn ByteEncodeResult::not_equal(Self, Self) -> Bool
+pub fn ByteEncodeResult::success(PcmEncoding, Array[Int32]) -> Self
+pub fn ByteEncodeResult::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct ByteReader {
-  bytes : Array[Int]
-  offset : Int
-} derive(Eq, @debug.Debug)
-pub fn ByteReader::at(Array[Int], Int) -> Self
-pub fn ByteReader::byte_at(Self, Int) -> Int
-pub fn ByteReader::can_read(Self, Int) -> Bool
-pub fn ByteReader::fourcc_at(Self, Int) -> String
-pub fn ByteReader::i16_le_at(Self, Int) -> Int
-pub fn ByteReader::i24_le_at(Self, Int) -> Int
-pub fn ByteReader::i32_le_at(Self, Int) -> Int
-pub fn ByteReader::length(Self) -> Int
-pub fn ByteReader::matches_ascii(Self, Int, Int, Int, Int, Int) -> Bool
-pub fn ByteReader::new(Array[Int]) -> Self
-pub fn ByteReader::remaining(Self) -> Int
-pub fn ByteReader::slice_can_read(Self, Int, Int) -> Bool
-pub fn ByteReader::u16_le_at(Self, Int) -> Int
-pub fn ByteReader::u24_le_at(Self, Int) -> Int
-pub fn ByteReader::u32_le_at(Self, Int) -> Int
+  bytes : Array[Int32]
+  offset : Int32
+}
+pub fn ByteReader::at(Array[Int32], Int32) -> Self
+pub fn ByteReader::byte_at(Self, Int32) -> Int32
+pub fn ByteReader::can_read(Self, Int32) -> Bool
+pub fn ByteReader::equal(Self, Self) -> Bool
+pub fn ByteReader::fourcc_at(Self, Int32) -> String
+pub fn ByteReader::i16_le_at(Self, Int32) -> Int32
+pub fn ByteReader::i24_le_at(Self, Int32) -> Int32
+pub fn ByteReader::i32_le_at(Self, Int32) -> Int32
+pub fn ByteReader::length(Self) -> Int32
+pub fn ByteReader::matches_ascii(Self, Int32, Int32, Int32, Int32, Int32) -> Bool
+pub fn ByteReader::new(Array[Int32]) -> Self
+pub fn ByteReader::not_equal(Self, Self) -> Bool
+pub fn ByteReader::remaining(Self) -> Int32
+pub fn ByteReader::slice_can_read(Self, Int32, Int32) -> Bool
+pub fn ByteReader::to_repr(Self) -> @debug.Repr
+pub fn ByteReader::u16_le_at(Self, Int32) -> Int32
+pub fn ByteReader::u24_le_at(Self, Int32) -> Int32
+pub fn ByteReader::u32_le_at(Self, Int32) -> Int32
 
+#derive(Eq, @debug.Debug)
 pub(all) struct ChannelStats {
-  channel : Int
+  channel : Int32
   peak : Double
   rms : Double
   average : Double
-  silent_samples : Int
-  clipped_samples : Int
-} derive(Eq, @debug.Debug)
-pub fn ChannelStats::empty(Int) -> Self
+  silent_samples : Int32
+  clipped_samples : Int32
+}
+pub fn ChannelStats::empty(Int32) -> Self
+pub fn ChannelStats::equal(Self, Self) -> Bool
+pub fn ChannelStats::not_equal(Self, Self) -> Bool
+pub fn ChannelStats::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct ChunkSummary {
   id : String
-  offset : Int
-  data_offset : Int
-  size : Int
+  offset : Int32
+  data_offset : Int32
+  size : Int32
   known : Bool
-} derive(Eq, @debug.Debug)
+}
+pub fn ChunkSummary::equal(Self, Self) -> Bool
 pub fn ChunkSummary::from_chunk(WaveChunk) -> Self
+pub fn ChunkSummary::not_equal(Self, Self) -> Bool
+pub fn ChunkSummary::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct CuePoint {
-  id : Int
-  position : Int
-  sample_offset : Int
-} derive(Eq, @debug.Debug)
+  id : Int32
+  position : Int32
+  sample_offset : Int32
+}
 pub fn CuePoint::empty() -> Self
+pub fn CuePoint::equal(Self, Self) -> Bool
 pub fn CuePoint::is_valid(Self) -> Bool
-pub fn CuePoint::new(Int, Int, Int) -> Self
+pub fn CuePoint::new(Int32, Int32, Int32) -> Self
+pub fn CuePoint::not_equal(Self, Self) -> Bool
+pub fn CuePoint::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct CueTimeline {
-  count : Int
-  first_sample : Int
-  last_sample : Int
-  sample_rate : Int
+  count : Int32
+  first_sample : Int32
+  last_sample : Int32
+  sample_rate : Int32
   duration_seconds : Double
   cue_points : Array[CuePoint]
-} derive(Eq, @debug.Debug)
+}
 pub fn CueTimeline::empty() -> Self
+pub fn CueTimeline::equal(Self, Self) -> Bool
 pub fn CueTimeline::is_empty(Self) -> Bool
+pub fn CueTimeline::not_equal(Self, Self) -> Bool
+pub fn CueTimeline::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct DecodeOptions {
   normalize : Bool
   clamp : Bool
-  target_channels : Int
-} derive(Eq, @debug.Debug)
+  target_channels : Int32
+}
+pub fn DecodeOptions::equal(Self, Self) -> Bool
 pub fn DecodeOptions::is_valid(Self) -> Bool
-pub fn DecodeOptions::new(normalize? : Bool, clamp? : Bool, target_channels? : Int) -> Self
+pub fn DecodeOptions::new(normalize? : Bool, clamp? : Bool, target_channels? : Int32) -> Self
+pub fn DecodeOptions::not_equal(Self, Self) -> Bool
+pub fn DecodeOptions::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct DecodeResult {
   ok : Bool
   pcm : PcmBuffer
   float_buffer : FloatBuffer
   error : WavError
-} derive(Eq, @debug.Debug)
+}
+pub fn DecodeResult::equal(Self, Self) -> Bool
 pub fn DecodeResult::failure(WavError) -> Self
+pub fn DecodeResult::not_equal(Self, Self) -> Bool
 pub fn DecodeResult::success(PcmBuffer, FloatBuffer) -> Self
+pub fn DecodeResult::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct FixtureCase {
   name : String
-  bytes : Array[Int]
+  bytes : Array[Int32]
   expectation : FixtureExpectation
   expected_error : String
-} derive(Eq, @debug.Debug)
-pub fn FixtureCase::new(String, Array[Int], FixtureExpectation, expected_error? : String) -> Self
+}
+pub fn FixtureCase::equal(Self, Self) -> Bool
+pub fn FixtureCase::new(String, Array[Int32], FixtureExpectation, expected_error? : String) -> Self
+pub fn FixtureCase::not_equal(Self, Self) -> Bool
+pub fn FixtureCase::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct FixtureCaseResult {
   name : String
   passed : Bool
   expectation : String
   actual_error : String
-  frames : Int
-  channels : Int
-  sample_rate : Int
-} derive(Eq, @debug.Debug)
-pub fn FixtureCaseResult::new(String, Bool, String, String, Int, Int, Int) -> Self
+  frames : Int32
+  channels : Int32
+  sample_rate : Int32
+}
+pub fn FixtureCaseResult::equal(Self, Self) -> Bool
+pub fn FixtureCaseResult::new(String, Bool, String, String, Int32, Int32, Int32) -> Self
+pub fn FixtureCaseResult::not_equal(Self, Self) -> Bool
+pub fn FixtureCaseResult::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum FixtureExpectation {
   FixtureShouldPass
   FixtureShouldFailValidation
   FixtureShouldFailDecode
-} derive(Eq, @debug.Debug)
+}
+pub fn FixtureExpectation::equal(Self, Self) -> Bool
 pub fn FixtureExpectation::label(Self) -> String
+pub fn FixtureExpectation::not_equal(Self, Self) -> Bool
+pub fn FixtureExpectation::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct FloatBuffer {
-  channels : Int
-  sample_rate : Int
+  channels : Int32
+  sample_rate : Int32
   samples : Array[Double]
-} derive(Eq, @debug.Debug)
+}
 pub fn FloatBuffer::duration_seconds(Self) -> Double
 pub fn FloatBuffer::empty() -> Self
-pub fn FloatBuffer::frame_count(Self) -> Int
+pub fn FloatBuffer::equal(Self, Self) -> Bool
+pub fn FloatBuffer::frame_count(Self) -> Int32
 pub fn FloatBuffer::is_valid(Self) -> Bool
-pub fn FloatBuffer::new(Int, Int, Array[Double]) -> Self
+pub fn FloatBuffer::new(Int32, Int32, Array[Double]) -> Self
+pub fn FloatBuffer::not_equal(Self, Self) -> Bool
+pub fn FloatBuffer::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct FormatSummary {
   encoding : String
-  channels : Int
-  sample_rate : Int
-  bits_per_sample : Int
-  frame_count : Int
+  channels : Int32
+  sample_rate : Int32
+  bits_per_sample : Int32
+  frame_count : Int32
   duration_seconds : Double
-  byte_rate : Int
-  data_bytes : Int
-} derive(Eq, @debug.Debug)
+  byte_rate : Int32
+  data_bytes : Int32
+}
 pub fn FormatSummary::empty() -> Self
+pub fn FormatSummary::equal(Self, Self) -> Bool
+pub fn FormatSummary::not_equal(Self, Self) -> Bool
+pub fn FormatSummary::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct FrameRange {
-  start_frame : Int
-  frame_count : Int
-} derive(Eq, @debug.Debug)
-pub fn FrameRange::end_frame(Self) -> Int
+  start_frame : Int32
+  frame_count : Int32
+}
+pub fn FrameRange::end_frame(Self) -> Int32
+pub fn FrameRange::equal(Self, Self) -> Bool
 pub fn FrameRange::is_valid(Self) -> Bool
-pub fn FrameRange::new(Int, Int) -> Self
+pub fn FrameRange::new(Int32, Int32) -> Self
+pub fn FrameRange::not_equal(Self, Self) -> Bool
+pub fn FrameRange::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct InfoCatalog {
   title : String
   artist : String
   comment : String
   software : String
   raw_tags : Array[InfoTag]
-} derive(Eq, @debug.Debug)
+}
 pub fn InfoCatalog::display_title(Self) -> String
 pub fn InfoCatalog::empty() -> Self
+pub fn InfoCatalog::equal(Self, Self) -> Bool
 pub fn InfoCatalog::has_metadata(Self) -> Bool
+pub fn InfoCatalog::not_equal(Self, Self) -> Bool
+pub fn InfoCatalog::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct InfoTag {
   key : String
   value : String
-} derive(Eq, @debug.Debug)
+}
 pub fn InfoTag::empty() -> Self
+pub fn InfoTag::equal(Self, Self) -> Bool
 pub fn InfoTag::is_valid(Self) -> Bool
 pub fn InfoTag::new(String, String) -> Self
+pub fn InfoTag::not_equal(Self, Self) -> Bool
+pub fn InfoTag::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct LoopResult {
   ok : Bool
-  repeats : Int
+  repeats : Int32
   source_range : FrameRange
   buffer : FloatBuffer
   error : WavError
-} derive(Eq, @debug.Debug)
+}
+pub fn LoopResult::equal(Self, Self) -> Bool
 pub fn LoopResult::failure(WavError) -> Self
-pub fn LoopResult::success(Int, FrameRange, FloatBuffer) -> Self
+pub fn LoopResult::not_equal(Self, Self) -> Bool
+pub fn LoopResult::success(Int32, FrameRange, FloatBuffer) -> Self
+pub fn LoopResult::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct NormalizeReport {
   ok : Bool
   gain : Double
@@ -470,55 +579,75 @@ pub(all) struct NormalizeReport {
   after_peak : Double
   buffer : FloatBuffer
   error : WavError
-} derive(Eq, @debug.Debug)
+}
+pub fn NormalizeReport::equal(Self, Self) -> Bool
 pub fn NormalizeReport::failure(WavError) -> Self
+pub fn NormalizeReport::not_equal(Self, Self) -> Bool
 pub fn NormalizeReport::success(Double, Double, Double, FloatBuffer) -> Self
+pub fn NormalizeReport::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct ParsedWav {
   header : RiffHeader
   format : WaveFormat
   chunks : Array[WaveChunk]
   info_tags : Array[InfoTag]
   cue_points : Array[CuePoint]
-  fact_sample_count : Int
-  data_offset : Int
-  data_size : Int
-  source_length : Int
-} derive(Eq, @debug.Debug)
+  fact_sample_count : Int32
+  data_offset : Int32
+  data_size : Int32
+  source_length : Int32
+}
 pub fn ParsedWav::empty() -> Self
+pub fn ParsedWav::equal(Self, Self) -> Bool
 pub fn ParsedWav::has_chunk(Self, String) -> Bool
 pub fn ParsedWav::info(Self) -> WaveInfo
 pub fn ParsedWav::is_complete(Self) -> Bool
+pub fn ParsedWav::not_equal(Self, Self) -> Bool
+pub fn ParsedWav::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct PcmBuffer {
-  channels : Int
-  sample_rate : Int
-  bits_per_sample : Int
-  samples : Array[Int]
-} derive(Eq, @debug.Debug)
+  channels : Int32
+  sample_rate : Int32
+  bits_per_sample : Int32
+  samples : Array[Int32]
+}
 pub fn PcmBuffer::duration_seconds(Self) -> Double
 pub fn PcmBuffer::empty() -> Self
-pub fn PcmBuffer::frame_count(Self) -> Int
+pub fn PcmBuffer::equal(Self, Self) -> Bool
+pub fn PcmBuffer::frame_count(Self) -> Int32
 pub fn PcmBuffer::is_valid(Self) -> Bool
-pub fn PcmBuffer::new(Int, Int, Int, Array[Int]) -> Self
+pub fn PcmBuffer::new(Int32, Int32, Int32, Array[Int32]) -> Self
+pub fn PcmBuffer::not_equal(Self, Self) -> Bool
+pub fn PcmBuffer::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum PcmEncoding {
   PcmU8
   PcmS16
   PcmS24
   PcmS32
-} derive(Eq, @debug.Debug)
-pub fn PcmEncoding::bits_per_sample(Self) -> Int
+}
+pub fn PcmEncoding::bits_per_sample(Self) -> Int32
+pub fn PcmEncoding::equal(Self, Self) -> Bool
 pub fn PcmEncoding::label(Self) -> String
+pub fn PcmEncoding::not_equal(Self, Self) -> Bool
+pub fn PcmEncoding::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct QualityFinding {
   kind : QualityFindingKind
   severity : ValidationSeverity
   message : String
   value : Double
-} derive(Eq, @debug.Debug)
+}
+pub fn QualityFinding::equal(Self, Self) -> Bool
 pub fn QualityFinding::new(QualityFindingKind, ValidationSeverity, String, value? : Double) -> Self
+pub fn QualityFinding::not_equal(Self, Self) -> Bool
+pub fn QualityFinding::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum QualityFindingKind {
   QualityOk
   QualityClipping
@@ -527,118 +656,166 @@ pub(all) enum QualityFindingKind {
   QualityDcOffset
   QualityHighCrest
   QualityHighZeroCrossing
-} derive(Eq, @debug.Debug)
+}
+pub fn QualityFindingKind::equal(Self, Self) -> Bool
 pub fn QualityFindingKind::label(Self) -> String
+pub fn QualityFindingKind::not_equal(Self, Self) -> Bool
+pub fn QualityFindingKind::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct QualityProfile {
   ok : Bool
-  score : Int
+  score : Int32
   stats : AudioStats
   crest_factor : Double
   zero_crossing_rate : Double
   findings : Array[QualityFinding]
-} derive(Eq, @debug.Debug)
+}
 pub fn QualityProfile::empty() -> Self
+pub fn QualityProfile::equal(Self, Self) -> Bool
 pub fn QualityProfile::has_warnings(Self) -> Bool
+pub fn QualityProfile::not_equal(Self, Self) -> Bool
+pub fn QualityProfile::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum ReportFormat {
   ReportText
   ReportJson
-} derive(Eq, @debug.Debug)
+}
+pub fn ReportFormat::equal(Self, Self) -> Bool
 pub fn ReportFormat::label(Self) -> String
+pub fn ReportFormat::not_equal(Self, Self) -> Bool
+pub fn ReportFormat::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct ResampleResult {
   ok : Bool
-  source_sample_rate : Int
-  target_sample_rate : Int
-  source_frames : Int
-  target_frames : Int
+  source_sample_rate : Int32
+  target_sample_rate : Int32
+  source_frames : Int32
+  target_frames : Int32
   buffer : FloatBuffer
   error : WavError
-} derive(Eq, @debug.Debug)
+}
+pub fn ResampleResult::equal(Self, Self) -> Bool
 pub fn ResampleResult::failure(WavError) -> Self
-pub fn ResampleResult::success(Int, Int, Int, FloatBuffer) -> Self
+pub fn ResampleResult::not_equal(Self, Self) -> Bool
+pub fn ResampleResult::success(Int32, Int32, Int32, FloatBuffer) -> Self
+pub fn ResampleResult::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct RiffHeader {
   riff_id : String
-  file_size_minus_8 : Int
+  file_size_minus_8 : Int32
   wave_id : String
-} derive(Eq, @debug.Debug)
+}
 pub fn RiffHeader::empty() -> Self
+pub fn RiffHeader::equal(Self, Self) -> Bool
 pub fn RiffHeader::is_valid(Self) -> Bool
+pub fn RiffHeader::not_equal(Self, Self) -> Bool
+pub fn RiffHeader::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct SampleRegion {
-  start : Int
-  length : Int
+  start : Int32
+  length : Int32
   threshold : Double
-} derive(Eq, @debug.Debug)
-pub fn SampleRegion::end_exclusive(Self) -> Int
+}
+pub fn SampleRegion::end_exclusive(Self) -> Int32
+pub fn SampleRegion::equal(Self, Self) -> Bool
 pub fn SampleRegion::is_valid(Self) -> Bool
-pub fn SampleRegion::new(Int, Int, threshold? : Double) -> Self
+pub fn SampleRegion::new(Int32, Int32, threshold? : Double) -> Self
+pub fn SampleRegion::not_equal(Self, Self) -> Bool
+pub fn SampleRegion::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct SupportEntry {
   encoding : String
-  bits_per_sample : Int
+  bits_per_sample : Int32
   can_parse : Bool
   can_decode : Bool
   can_encode : Bool
   notes : String
-} derive(Eq, @debug.Debug)
-pub fn SupportEntry::new(String, Int, Bool, Bool, Bool, String) -> Self
+}
+pub fn SupportEntry::equal(Self, Self) -> Bool
+pub fn SupportEntry::new(String, Int32, Bool, Bool, Bool, String) -> Self
+pub fn SupportEntry::not_equal(Self, Self) -> Bool
 pub fn SupportEntry::status(Self) -> String
+pub fn SupportEntry::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct TrimResult {
   ok : Bool
-  start_frame : Int
-  end_frame : Int
-  removed_start_frames : Int
-  removed_end_frames : Int
+  start_frame : Int32
+  end_frame : Int32
+  removed_start_frames : Int32
+  removed_end_frames : Int32
   buffer : FloatBuffer
   error : WavError
-} derive(Eq, @debug.Debug)
+}
+pub fn TrimResult::equal(Self, Self) -> Bool
 pub fn TrimResult::failure(WavError) -> Self
-pub fn TrimResult::success(Int, Int, Int, FloatBuffer) -> Self
+pub fn TrimResult::not_equal(Self, Self) -> Bool
+pub fn TrimResult::success(Int32, Int32, Int32, FloatBuffer) -> Self
+pub fn TrimResult::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct ValidationIssue {
   severity : ValidationSeverity
   code : String
   message : String
-  offset : Int
-} derive(Eq, @debug.Debug)
+  offset : Int32
+}
+pub fn ValidationIssue::equal(Self, Self) -> Bool
 pub fn ValidationIssue::is_error(Self) -> Bool
-pub fn ValidationIssue::new(ValidationSeverity, String, String, offset? : Int) -> Self
+pub fn ValidationIssue::new(ValidationSeverity, String, String, offset? : Int32) -> Self
+pub fn ValidationIssue::not_equal(Self, Self) -> Bool
+pub fn ValidationIssue::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct ValidationReport {
   ok : Bool
-  error_count : Int
-  warning_count : Int
-  info_count : Int
+  error_count : Int32
+  warning_count : Int32
+  info_count : Int32
   format : WaveFormat
   info : WaveInfo
   issues : Array[ValidationIssue]
   chunks : Array[ChunkSummary]
-} derive(Eq, @debug.Debug)
+}
 pub fn ValidationReport::empty() -> Self
+pub fn ValidationReport::equal(Self, Self) -> Bool
 pub fn ValidationReport::has_errors(Self) -> Bool
 pub fn ValidationReport::has_warnings(Self) -> Bool
+pub fn ValidationReport::not_equal(Self, Self) -> Bool
+pub fn ValidationReport::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum ValidationSeverity {
   SeverityInfo
   SeverityWarning
   SeverityError
-} derive(Eq, @debug.Debug)
+}
+pub fn ValidationSeverity::equal(Self, Self) -> Bool
 pub fn ValidationSeverity::label(Self) -> String
+pub fn ValidationSeverity::not_equal(Self, Self) -> Bool
+pub fn ValidationSeverity::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct WavError {
   kind : WavErrorKind
-  offset : Int
+  offset : Int32
   message : String
-} derive(Eq, @debug.Debug)
+}
 pub fn WavError::code(Self) -> String
+pub fn WavError::equal(Self, Self) -> Bool
 pub fn WavError::is_error(Self) -> Bool
-pub fn WavError::new(WavErrorKind, String, offset? : Int) -> Self
+pub fn WavError::new(WavErrorKind, String, offset? : Int32) -> Self
 pub fn WavError::none() -> Self
+pub fn WavError::not_equal(Self, Self) -> Bool
+pub fn WavError::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum WavErrorKind {
   ErrorNone
   ErrorTooShort
@@ -651,52 +828,68 @@ pub(all) enum WavErrorKind {
   ErrorInvalidFormat
   ErrorTruncatedData
   ErrorInvalidArgument
-} derive(Eq, @debug.Debug)
+}
 pub fn WavErrorKind::code(Self) -> String
+pub fn WavErrorKind::equal(Self, Self) -> Bool
+pub fn WavErrorKind::not_equal(Self, Self) -> Bool
+pub fn WavErrorKind::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct WavParseResult {
   ok : Bool
   wav : ParsedWav
   error : WavError
-} derive(Eq, @debug.Debug)
+}
+pub fn WavParseResult::equal(Self, Self) -> Bool
 pub fn WavParseResult::failure(WavError) -> Self
 pub fn WavParseResult::is_ok(Self) -> Bool
+pub fn WavParseResult::not_equal(Self, Self) -> Bool
 pub fn WavParseResult::success(ParsedWav) -> Self
+pub fn WavParseResult::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct WavReport {
   ok : Bool
   title : String
   encoding : String
-  channels : Int
-  sample_rate : Int
-  bits_per_sample : Int
+  channels : Int32
+  sample_rate : Int32
+  bits_per_sample : Int32
   duration_seconds : Double
-  frame_count : Int
-  chunk_count : Int
+  frame_count : Int32
+  chunk_count : Int32
   peak : Double
   rms : Double
   quality : String
   error_code : String
-} derive(Eq, @debug.Debug)
+}
 pub fn WavReport::empty() -> Self
+pub fn WavReport::equal(Self, Self) -> Bool
 pub fn WavReport::failure(String) -> Self
+pub fn WavReport::not_equal(Self, Self) -> Bool
 pub fn WavReport::render(Self, ReportFormat) -> String
 pub fn WavReport::to_json(Self) -> String
+pub fn WavReport::to_repr(Self) -> @debug.Repr
 pub fn WavReport::to_text(Self) -> String
 
+#derive(Eq, @debug.Debug)
 pub(all) struct WaveChunk {
   id : String
-  offset : Int
-  data_offset : Int
-  size : Int
-  padded_size : Int
-} derive(Eq, @debug.Debug)
-pub fn WaveChunk::contains(Self, Int) -> Bool
+  offset : Int32
+  data_offset : Int32
+  size : Int32
+  padded_size : Int32
+}
+pub fn WaveChunk::contains(Self, Int32) -> Bool
 pub fn WaveChunk::empty() -> Self
-pub fn WaveChunk::end_offset(Self) -> Int
+pub fn WaveChunk::end_offset(Self) -> Int32
+pub fn WaveChunk::equal(Self, Self) -> Bool
 pub fn WaveChunk::is_known(Self) -> Bool
-pub fn WaveChunk::new(String, Int, Int, Int) -> Self
+pub fn WaveChunk::new(String, Int32, Int32, Int32) -> Self
+pub fn WaveChunk::not_equal(Self, Self) -> Bool
+pub fn WaveChunk::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) enum WaveEncoding {
   EncodingUnknown
   EncodingPcm
@@ -704,63 +897,86 @@ pub(all) enum WaveEncoding {
   EncodingALaw
   EncodingMuLaw
   EncodingExtensible
-} derive(Eq, @debug.Debug)
+}
+pub fn WaveEncoding::equal(Self, Self) -> Bool
 pub fn WaveEncoding::label(Self) -> String
+pub fn WaveEncoding::not_equal(Self, Self) -> Bool
+pub fn WaveEncoding::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct WaveFormat {
-  audio_format : Int
+  audio_format : Int32
   encoding : WaveEncoding
-  channels : Int
-  sample_rate : Int
-  byte_rate : Int
-  block_align : Int
-  bits_per_sample : Int
-  extra_size : Int
-} derive(Eq, @debug.Debug)
-pub fn WaveFormat::bytes_per_sample(Self) -> Int
+  channels : Int32
+  sample_rate : Int32
+  byte_rate : Int32
+  block_align : Int32
+  bits_per_sample : Int32
+  extra_size : Int32
+}
+pub fn WaveFormat::bytes_per_sample(Self) -> Int32
 pub fn WaveFormat::empty() -> Self
-pub fn WaveFormat::expected_block_align(Self) -> Int
-pub fn WaveFormat::expected_byte_rate(Self) -> Int
+pub fn WaveFormat::equal(Self, Self) -> Bool
+pub fn WaveFormat::expected_block_align(Self) -> Int32
+pub fn WaveFormat::expected_byte_rate(Self) -> Int32
 pub fn WaveFormat::is_float(Self) -> Bool
 pub fn WaveFormat::is_pcm(Self) -> Bool
 pub fn WaveFormat::is_supported(Self) -> Bool
 pub fn WaveFormat::is_valid(Self) -> Bool
-pub fn WaveFormat::new(Int, Int, Int, Int, Int, Int, extra_size? : Int) -> Self
+pub fn WaveFormat::new(Int32, Int32, Int32, Int32, Int32, Int32, extra_size? : Int32) -> Self
+pub fn WaveFormat::not_equal(Self, Self) -> Bool
+pub fn WaveFormat::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct WaveInfo {
   duration_seconds : Double
-  frame_count : Int
-  sample_count : Int
-  data_bytes : Int
-} derive(Eq, @debug.Debug)
+  frame_count : Int32
+  sample_count : Int32
+  data_bytes : Int32
+}
 pub fn WaveInfo::empty() -> Self
+pub fn WaveInfo::equal(Self, Self) -> Bool
 pub fn WaveInfo::is_valid(Self) -> Bool
+pub fn WaveInfo::not_equal(Self, Self) -> Bool
+pub fn WaveInfo::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct WaveformBucket {
-  index : Int
+  index : Int32
   min : Double
   max : Double
   average_abs : Double
-} derive(Eq, @debug.Debug)
-pub fn WaveformBucket::empty(Int) -> Self
+}
+pub fn WaveformBucket::empty(Int32) -> Self
+pub fn WaveformBucket::equal(Self, Self) -> Bool
+pub fn WaveformBucket::not_equal(Self, Self) -> Bool
+pub fn WaveformBucket::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct WaveformPoint {
-  index : Int
-  start_frame : Int
-  end_frame : Int
+  index : Int32
+  start_frame : Int32
+  end_frame : Int32
   min : Double
   max : Double
   rms : Double
-} derive(Eq, @debug.Debug)
-pub fn WaveformPoint::empty(Int) -> Self
+}
+pub fn WaveformPoint::empty(Int32) -> Self
+pub fn WaveformPoint::equal(Self, Self) -> Bool
+pub fn WaveformPoint::not_equal(Self, Self) -> Bool
+pub fn WaveformPoint::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub(all) struct WaveformSummary {
   buckets : Array[WaveformBucket]
-  bucket_count : Int
-  source_samples : Int
-} derive(Eq, @debug.Debug)
+  bucket_count : Int32
+  source_samples : Int32
+}
 pub fn WaveformSummary::empty() -> Self
+pub fn WaveformSummary::equal(Self, Self) -> Bool
 pub fn WaveformSummary::is_valid(Self) -> Bool
+pub fn WaveformSummary::not_equal(Self, Self) -> Bool
+pub fn WaveformSummary::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 

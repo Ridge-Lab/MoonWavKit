@@ -11,7 +11,7 @@
 
 name = "Ridge-Lab/moonwavkit"
 
-version = "0.1.3"
+version = "0.1.4"
 
 readme = "README.md"
 
@@ -24,7 +24,3 @@ keywords = [ "wav", "audio", "pcm", "riff", "moonbit" ]
 preferred_target = "wasm-gc"
 
 description = "MoonBit-native WAV parser, PCM decoder, waveform analysis, validation, and audio utility toolkit."
-
-options(
-  exclude: [ "submission", "tools", "docs/SUBMISSION.md", "AGENTS.md" ],
-)

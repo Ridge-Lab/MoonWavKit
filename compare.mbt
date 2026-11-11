@@ -1,12 +1,13 @@
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct BufferComparison {
   comparable : Bool
-  sample_count : Int
+  sample_count : Int32
   max_abs_error : Double
   mean_abs_error : Double
   equal_with_tolerance : Bool
   error : WavError
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn BufferComparison::failure(error : WavError) -> BufferComparison {
@@ -22,7 +23,7 @@ pub fn BufferComparison::failure(error : WavError) -> BufferComparison {
 
 ///|
 pub fn BufferComparison::success(
-  sample_count : Int,
+  sample_count : Int32,
   max_abs_error : Double,
   mean_abs_error : Double,
   equal_with_tolerance : Bool,
@@ -41,7 +42,7 @@ pub fn BufferComparison::success(
 pub fn compare_buffers(
   expected : FloatBuffer,
   actual : FloatBuffer,
-  tolerance? : Double = 0.0001,
+  tolerance~ : Double = 0.0001,
 ) -> BufferComparison {
   if !compatible_format(expected, actual) {
     BufferComparison::failure(
@@ -93,7 +94,7 @@ pub fn compare_buffers(
 pub fn buffers_are_close(
   expected : FloatBuffer,
   actual : FloatBuffer,
-  tolerance? : Double = 0.0001,
+  tolerance~ : Double = 0.0001,
 ) -> Bool {
   let comparison = compare_buffers(expected, actual, tolerance~)
   comparison.comparable && comparison.equal_with_tolerance

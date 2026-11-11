@@ -7,4 +7,5 @@ target
 .moonagent/
 bisect.coverage
 tmp/
-submission/*_preview.png
+/submission/
+/tools/create_proposal.py

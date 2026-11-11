@@ -1,23 +1,24 @@
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct SupportEntry {
   encoding : String
-  bits_per_sample : Int
+  bits_per_sample : Int32
   can_parse : Bool
   can_decode : Bool
   can_encode : Bool
   notes : String
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn SupportEntry::new(
   encoding : String,
-  bits_per_sample : Int,
+  bits_per_sample : Int32,
   can_parse : Bool,
   can_decode : Bool,
   can_encode : Bool,
   notes : String,
 ) -> SupportEntry {
-  { encoding, bits_per_sample, can_parse, can_decode, can_encode, notes }
+  { encoding, bits_per_sample, can_parse, can_decode, can_encode, notes, }
 }
 
 ///|
@@ -69,11 +70,12 @@ pub fn support_matrix_to_text() -> String {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) enum FixtureExpectation {
   FixtureShouldPass
   FixtureShouldFailValidation
   FixtureShouldFailDecode
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn FixtureExpectation::label(self : FixtureExpectation) -> String {
@@ -85,33 +87,35 @@ pub fn FixtureExpectation::label(self : FixtureExpectation) -> String {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct FixtureCase {
   name : String
-  bytes : Array[Int]
+  bytes : Array[Int32]
   expectation : FixtureExpectation
   expected_error : String
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn FixtureCase::new(
   name : String,
-  bytes : Array[Int],
+  bytes : Array[Int32],
   expectation : FixtureExpectation,
-  expected_error? : String = "",
+  expected_error~ : String = "",
 ) -> FixtureCase {
-  { name, bytes, expectation, expected_error }
+  { name, bytes, expectation, expected_error, }
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct FixtureCaseResult {
   name : String
   passed : Bool
   expectation : String
   actual_error : String
-  frames : Int
-  channels : Int
-  sample_rate : Int
-} derive(Eq, @debug.Debug)
+  frames : Int32
+  channels : Int32
+  sample_rate : Int32
+}
 
 ///|
 pub fn FixtureCaseResult::new(
@@ -119,11 +123,11 @@ pub fn FixtureCaseResult::new(
   passed : Bool,
   expectation : String,
   actual_error : String,
-  frames : Int,
-  channels : Int,
-  sample_rate : Int,
+  frames : Int32,
+  channels : Int32,
+  sample_rate : Int32,
 ) -> FixtureCaseResult {
-  { name, passed, expectation, actual_error, frames, channels, sample_rate }
+  { name, passed, expectation, actual_error, frames, channels, sample_rate, }
 }
 
 ///|

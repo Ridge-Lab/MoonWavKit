@@ -4,15 +4,14 @@
 
 MoonWavKit 是一个 MoonBit 原生 WAV 音频解析与 PCM 工具库，面向游戏资源检查、音频可视化、教学实验、WebAssembly 音频应用和自动化素材流水线。
 
-它不是播放器，也不依赖外部音频库；v0.1.3 聚焦 RIFF/WAVE 结构解析、PCM/Float 解码、音频统计、波形摘要、区段分析、质量检查、内置 fixture 验收矩阵和可复现示例。
+它不是播放器，也不依赖外部音频库；v0.1.4 聚焦 RIFF/WAVE 结构解析、PCM/Float 解码、音频统计、波形摘要、区段分析、质量检查、内置 fixture 验收矩阵和可复现示例。
 
 ## 发布与质量
 
-- MoonBit 源码规模：核心库约 4260 行；连同测试、CLI 和示例共约 5170 行。
 - 测试：72 个测试，覆盖解析、解码、统计、处理、校验、元数据、区段分析、质量检查和 fixture 矩阵。
 - 示例：`cmd/main` 和 `examples/basic` 均可运行。
 - CI：覆盖格式检查、全目标检查/构建/测试、覆盖率摘要、公开接口一致性和示例运行。
-- 发布：Mooncakes 包 `Ridge-Lab/moonwavkit@0.1.3`。
+- 发布：Mooncakes 包 `Ridge-Lab/moonwavkit@0.1.4`。
 - 许可证：MIT，属于 OSI 认可开源许可证。
 
 ## 支持范围
@@ -40,8 +39,9 @@ MoonWavKit 是一个 MoonBit 原生 WAV 音频解析与 PCM 工具库，面向�
 
 ## 兼容性
 
-- 已验证工具链：MoonBit `0.10.8` / `moon 0.1.20260814`。
-- 默认目标：`wasm-gc`；核心包通过 `wasm`、`wasm-gc`、`js`、`native` 全目标检查。
+- 2026-11-11 使用官方 stable 工具链验证 0.1.4。`moon version --all` 显示 `moonc v0.10.20+65efd5b93 (2026-11-05)`、`moon 0.1.20261104 (940aa18 2026-11-04)` 和 `moonrun 0.1.20261104 (940aa18 2026-11-04)`，功能标记为 `rr_moon_mod,rr_moon_pkg`。更新方法见[官方安装页](https://www.moonbitlang.com/download/)。
+- 0.1.4 使用当前编译器的 `#derive` 语法。使用 0.10.8 的现有工程可继续使用 0.1.3，升级到 0.1.4 时请同步升级工具链。
+- 默认目标：`wasm-gc`；CI 在 Ubuntu 上检查、构建、测试 `wasm`、`wasm-gc`、`js` 和 `native`。JS 示例需要 Node.js，native 构建需要系统 C 工具链。
 - 不依赖浏览器音频 API、系统音频设备或第三方音频库。
 - 输入由调用方以 `Array[Int]` 提供，库不负责文件系统读取或流式解码。
 
@@ -54,7 +54,7 @@ MoonBit 生态已有的相近包主要覆盖 WAV/OGG 编码、原生音频播放
 通过 Mooncakes 安装：
 
 ```bash
-moon add Ridge-Lab/moonwavkit@0.1.3
+moon add Ridge-Lab/moonwavkit@0.1.4
 ```
 
 本地开发：
@@ -99,6 +99,8 @@ moon run cmd/main -- --json
 ```bash
 moon run examples/basic
 ```
+
+内置 PCM16 单声道示例应输出 `sample_rate=8000`、`frames=4`、`peak=1` 和 `fixture_catalog_passed=true`。
 
 ## API 摘要
 

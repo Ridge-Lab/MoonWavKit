@@ -10,7 +10,7 @@ fn clamp_unit(value : Double) -> Double {
 }
 
 ///|
-fn normalize_pcm_sample(sample : Int, bits : Int) -> Double {
+fn normalize_pcm_sample(sample : Int32, bits : Int32) -> Double {
   match bits {
     8 => (sample.to_double() - 128.0) / 128.0
     16 => sample.to_double() / 32768.0
@@ -21,7 +21,7 @@ fn normalize_pcm_sample(sample : Int, bits : Int) -> Double {
 }
 
 ///|
-fn read_pcm_sample(reader : ByteReader, offset : Int, bits : Int) -> Int {
+fn read_pcm_sample(reader : ByteReader, offset : Int32, bits : Int32) -> Int32 {
   match bits {
     8 => reader.byte_at(offset)
     16 => reader.i16_le_at(offset)
@@ -32,7 +32,7 @@ fn read_pcm_sample(reader : ByteReader, offset : Int, bits : Int) -> Int {
 }
 
 ///|
-fn pow2(exp : Int) -> Double {
+fn pow2(exp : Int32) -> Double {
   if exp == 0 {
     1.0
   } else if exp > 0 {
@@ -51,7 +51,7 @@ fn pow2(exp : Int) -> Double {
 }
 
 ///|
-fn decode_ieee_float32_bits(bits : Int) -> Double {
+fn decode_ieee_float32_bits(bits : Int32) -> Double {
   let sign = if (bits & 0x80000000) != 0 { -1.0 } else { 1.0 }
   let exponent = (bits >> 23) & 0xff
   let fraction = bits & 0x7fffff
@@ -67,13 +67,13 @@ fn decode_ieee_float32_bits(bits : Int) -> Double {
 }
 
 ///|
-fn read_float32_sample(reader : ByteReader, offset : Int) -> Double {
+fn read_float32_sample(reader : ByteReader, offset : Int32) -> Double {
   decode_ieee_float32_bits(reader.u32_le_at(offset))
 }
 
 ///|
 fn decode_to_float_buffer(
-  bytes : Array[Int],
+  bytes : Array[Int32],
   wav : ParsedWav,
   options : DecodeOptions,
 ) -> FloatBuffer {
@@ -100,7 +100,7 @@ fn decode_to_float_buffer(
 }
 
 ///|
-fn decode_to_pcm_buffer(bytes : Array[Int], wav : ParsedWav) -> PcmBuffer {
+fn decode_to_pcm_buffer(bytes : Array[Int32], wav : ParsedWav) -> PcmBuffer {
   let reader = ByteReader::new(bytes)
   let bytes_per_sample = wav.format.bytes_per_sample()
   let sample_count = wav.data_size / bytes_per_sample
@@ -122,9 +122,9 @@ fn decode_to_pcm_buffer(bytes : Array[Int], wav : ParsedWav) -> PcmBuffer {
 
 ///|
 pub fn decode_pcm(
-  bytes : Array[Int],
+  bytes : Array[Int32],
   wav : ParsedWav,
-  options? : DecodeOptions = DecodeOptions::new(),
+  options~ : DecodeOptions = DecodeOptions::new(),
 ) -> DecodeResult {
   if !options.is_valid() {
     DecodeResult::failure(
@@ -171,8 +171,8 @@ pub fn decode_pcm(
 
 ///|
 pub fn parse_and_decode(
-  bytes : Array[Int],
-  options? : DecodeOptions = DecodeOptions::new(),
+  bytes : Array[Int32],
+  options~ : DecodeOptions = DecodeOptions::new(),
 ) -> DecodeResult {
   let parsed = parse_wav(bytes)
   if !parsed.ok {
@@ -183,7 +183,7 @@ pub fn parse_and_decode(
 }
 
 ///|
-pub fn split_channel(buffer : FloatBuffer, channel : Int) -> Array[Double] {
+pub fn split_channel(buffer : FloatBuffer, channel : Int32) -> Array[Double] {
   if !buffer.is_valid() || channel < 0 || channel >= buffer.channels {
     []
   } else {

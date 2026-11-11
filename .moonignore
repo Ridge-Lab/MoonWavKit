@@ -1,0 +1,16 @@
+.DS_Store
+_build/
+target/
+target
+.githooks/
+.mooncakes/
+.moonagent/
+bisect.coverage
+tmp/
+
+# Development and submission files are not part of the published library.
+/submission/
+/tools/
+/docs/SUBMISSION.md
+/AGENTS.md
+/.github/

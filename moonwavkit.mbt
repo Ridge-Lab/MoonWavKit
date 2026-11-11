@@ -1,5 +1,6 @@
 ///|
 /// Error categories returned by the parser, decoder, validator, and CLI model.
+#derive(Eq, @debug.Debug)
 pub(all) enum WavErrorKind {
   ErrorNone
   ErrorTooShort
@@ -12,7 +13,7 @@ pub(all) enum WavErrorKind {
   ErrorInvalidFormat
   ErrorTruncatedData
   ErrorInvalidArgument
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn WavErrorKind::code(self : WavErrorKind) -> String {
@@ -32,24 +33,25 @@ pub fn WavErrorKind::code(self : WavErrorKind) -> String {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct WavError {
   kind : WavErrorKind
-  offset : Int
+  offset : Int32
   message : String
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn WavError::none() -> WavError {
-  { kind: ErrorNone, offset: 0, message: "" }
+  { kind: ErrorNone, offset: 0, message: "", }
 }
 
 ///|
 pub fn WavError::new(
   kind : WavErrorKind,
   message : String,
-  offset? : Int = 0,
+  offset~ : Int32 = 0,
 ) -> WavError {
-  { kind, offset, message }
+  { kind, offset, message, }
 }
 
 ///|
@@ -64,47 +66,48 @@ pub fn WavError::code(self : WavError) -> String {
 
 ///|
 /// Non-owning reader over an integer byte array. Values outside 0..255 are masked.
+#derive(Eq, @debug.Debug)
 pub(all) struct ByteReader {
-  bytes : Array[Int]
-  offset : Int
-} derive(Eq, @debug.Debug)
-
-///|
-pub fn ByteReader::new(bytes : Array[Int]) -> ByteReader {
-  { bytes, offset: 0 }
+  bytes : Array[Int32]
+  offset : Int32
 }
 
 ///|
-pub fn ByteReader::at(bytes : Array[Int], offset : Int) -> ByteReader {
-  { bytes, offset }
+pub fn ByteReader::new(bytes : Array[Int32]) -> ByteReader {
+  { bytes, offset: 0, }
 }
 
 ///|
-pub fn ByteReader::length(self : ByteReader) -> Int {
+pub fn ByteReader::at(bytes : Array[Int32], offset : Int32) -> ByteReader {
+  { bytes, offset, }
+}
+
+///|
+pub fn ByteReader::length(self : ByteReader) -> Int32 {
   self.bytes.length()
 }
 
 ///|
-pub fn ByteReader::remaining(self : ByteReader) -> Int {
+pub fn ByteReader::remaining(self : ByteReader) -> Int32 {
   self.bytes.length() - self.offset
 }
 
 ///|
-pub fn ByteReader::can_read(self : ByteReader, count : Int) -> Bool {
+pub fn ByteReader::can_read(self : ByteReader, count : Int32) -> Bool {
   count >= 0 && self.offset >= 0 && self.offset + count <= self.bytes.length()
 }
 
 ///|
 pub fn ByteReader::slice_can_read(
   self : ByteReader,
-  offset : Int,
-  count : Int,
+  offset : Int32,
+  count : Int32,
 ) -> Bool {
   offset >= 0 && count >= 0 && offset + count <= self.bytes.length()
 }
 
 ///|
-pub fn ByteReader::byte_at(self : ByteReader, offset : Int) -> Int {
+pub fn ByteReader::byte_at(self : ByteReader, offset : Int32) -> Int32 {
   if self.slice_can_read(offset, 1) {
     self.bytes[offset] & 0xff
   } else {
@@ -113,19 +116,19 @@ pub fn ByteReader::byte_at(self : ByteReader, offset : Int) -> Int {
 }
 
 ///|
-pub fn ByteReader::u16_le_at(self : ByteReader, offset : Int) -> Int {
+pub fn ByteReader::u16_le_at(self : ByteReader, offset : Int32) -> Int32 {
   self.byte_at(offset) | (self.byte_at(offset + 1) << 8)
 }
 
 ///|
-pub fn ByteReader::u24_le_at(self : ByteReader, offset : Int) -> Int {
+pub fn ByteReader::u24_le_at(self : ByteReader, offset : Int32) -> Int32 {
   self.byte_at(offset) |
   (self.byte_at(offset + 1) << 8) |
   (self.byte_at(offset + 2) << 16)
 }
 
 ///|
-pub fn ByteReader::u32_le_at(self : ByteReader, offset : Int) -> Int {
+pub fn ByteReader::u32_le_at(self : ByteReader, offset : Int32) -> Int32 {
   self.byte_at(offset) |
   (self.byte_at(offset + 1) << 8) |
   (self.byte_at(offset + 2) << 16) |
@@ -133,7 +136,7 @@ pub fn ByteReader::u32_le_at(self : ByteReader, offset : Int) -> Int {
 }
 
 ///|
-pub fn ByteReader::i16_le_at(self : ByteReader, offset : Int) -> Int {
+pub fn ByteReader::i16_le_at(self : ByteReader, offset : Int32) -> Int32 {
   let raw = self.u16_le_at(offset)
   if raw >= 0x8000 {
     raw - 0x10000
@@ -143,7 +146,7 @@ pub fn ByteReader::i16_le_at(self : ByteReader, offset : Int) -> Int {
 }
 
 ///|
-pub fn ByteReader::i24_le_at(self : ByteReader, offset : Int) -> Int {
+pub fn ByteReader::i24_le_at(self : ByteReader, offset : Int32) -> Int32 {
   let raw = self.u24_le_at(offset)
   if raw >= 0x800000 {
     raw - 0x1000000
@@ -153,7 +156,7 @@ pub fn ByteReader::i24_le_at(self : ByteReader, offset : Int) -> Int {
 }
 
 ///|
-pub fn ByteReader::i32_le_at(self : ByteReader, offset : Int) -> Int {
+pub fn ByteReader::i32_le_at(self : ByteReader, offset : Int32) -> Int32 {
   let raw = self.u32_le_at(offset)
   raw
 }
@@ -161,11 +164,11 @@ pub fn ByteReader::i32_le_at(self : ByteReader, offset : Int) -> Int {
 ///|
 pub fn ByteReader::matches_ascii(
   self : ByteReader,
-  offset : Int,
-  a : Int,
-  b : Int,
-  c : Int,
-  d : Int,
+  offset : Int32,
+  a : Int32,
+  b : Int32,
+  c : Int32,
+  d : Int32,
 ) -> Bool {
   self.byte_at(offset) == a &&
   self.byte_at(offset + 1) == b &&
@@ -174,7 +177,7 @@ pub fn ByteReader::matches_ascii(
 }
 
 ///|
-pub fn ByteReader::fourcc_at(self : ByteReader, offset : Int) -> String {
+pub fn ByteReader::fourcc_at(self : ByteReader, offset : Int32) -> String {
   if self.matches_ascii(offset, 82, 73, 70, 70) {
     "RIFF"
   } else if self.matches_ascii(offset, 87, 65, 86, 69) {
@@ -219,15 +222,16 @@ pub fn ByteReader::fourcc_at(self : ByteReader, offset : Int) -> String {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct RiffHeader {
   riff_id : String
-  file_size_minus_8 : Int
+  file_size_minus_8 : Int32
   wave_id : String
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn RiffHeader::empty() -> RiffHeader {
-  { riff_id: "", file_size_minus_8: 0, wave_id: "" }
+  { riff_id: "", file_size_minus_8: 0, wave_id: "", }
 }
 
 ///|
@@ -238,37 +242,38 @@ pub fn RiffHeader::is_valid(self : RiffHeader) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct WaveChunk {
   id : String
-  offset : Int
-  data_offset : Int
-  size : Int
-  padded_size : Int
-} derive(Eq, @debug.Debug)
+  offset : Int32
+  data_offset : Int32
+  size : Int32
+  padded_size : Int32
+}
 
 ///|
 pub fn WaveChunk::new(
   id : String,
-  offset : Int,
-  data_offset : Int,
-  size : Int,
+  offset : Int32,
+  data_offset : Int32,
+  size : Int32,
 ) -> WaveChunk {
   let padded_size = if size % 2 == 0 { size } else { size + 1 }
-  { id, offset, data_offset, size, padded_size }
+  { id, offset, data_offset, size, padded_size, }
 }
 
 ///|
 pub fn WaveChunk::empty() -> WaveChunk {
-  { id: "", offset: 0, data_offset: 0, size: 0, padded_size: 0 }
+  { id: "", offset: 0, data_offset: 0, size: 0, padded_size: 0, }
 }
 
 ///|
-pub fn WaveChunk::end_offset(self : WaveChunk) -> Int {
+pub fn WaveChunk::end_offset(self : WaveChunk) -> Int32 {
   self.data_offset + self.padded_size
 }
 
 ///|
-pub fn WaveChunk::contains(self : WaveChunk, offset : Int) -> Bool {
+pub fn WaveChunk::contains(self : WaveChunk, offset : Int32) -> Bool {
   offset >= self.data_offset && offset < self.data_offset + self.size
 }
 
@@ -282,6 +287,7 @@ pub fn WaveChunk::is_known(self : WaveChunk) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) enum WaveEncoding {
   EncodingUnknown
   EncodingPcm
@@ -289,7 +295,7 @@ pub(all) enum WaveEncoding {
   EncodingALaw
   EncodingMuLaw
   EncodingExtensible
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn WaveEncoding::label(self : WaveEncoding) -> String {
@@ -304,7 +310,7 @@ pub fn WaveEncoding::label(self : WaveEncoding) -> String {
 }
 
 ///|
-pub fn encoding_from_code(code : Int) -> WaveEncoding {
+pub fn encoding_from_code(code : Int32) -> WaveEncoding {
   match code {
     1 => EncodingPcm
     3 => EncodingIeeeFloat
@@ -316,16 +322,17 @@ pub fn encoding_from_code(code : Int) -> WaveEncoding {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct WaveFormat {
-  audio_format : Int
+  audio_format : Int32
   encoding : WaveEncoding
-  channels : Int
-  sample_rate : Int
-  byte_rate : Int
-  block_align : Int
-  bits_per_sample : Int
-  extra_size : Int
-} derive(Eq, @debug.Debug)
+  channels : Int32
+  sample_rate : Int32
+  byte_rate : Int32
+  block_align : Int32
+  bits_per_sample : Int32
+  extra_size : Int32
+}
 
 ///|
 pub fn WaveFormat::empty() -> WaveFormat {
@@ -343,13 +350,13 @@ pub fn WaveFormat::empty() -> WaveFormat {
 
 ///|
 pub fn WaveFormat::new(
-  audio_format : Int,
-  channels : Int,
-  sample_rate : Int,
-  byte_rate : Int,
-  block_align : Int,
-  bits_per_sample : Int,
-  extra_size? : Int = 0,
+  audio_format : Int32,
+  channels : Int32,
+  sample_rate : Int32,
+  byte_rate : Int32,
+  block_align : Int32,
+  bits_per_sample : Int32,
+  extra_size~ : Int32 = 0,
 ) -> WaveFormat {
   {
     audio_format,
@@ -364,17 +371,17 @@ pub fn WaveFormat::new(
 }
 
 ///|
-pub fn WaveFormat::bytes_per_sample(self : WaveFormat) -> Int {
+pub fn WaveFormat::bytes_per_sample(self : WaveFormat) -> Int32 {
   self.bits_per_sample / 8
 }
 
 ///|
-pub fn WaveFormat::expected_block_align(self : WaveFormat) -> Int {
+pub fn WaveFormat::expected_block_align(self : WaveFormat) -> Int32 {
   self.channels * self.bytes_per_sample()
 }
 
 ///|
-pub fn WaveFormat::expected_byte_rate(self : WaveFormat) -> Int {
+pub fn WaveFormat::expected_byte_rate(self : WaveFormat) -> Int32 {
   self.sample_rate * self.expected_block_align()
 }
 
@@ -414,19 +421,20 @@ pub fn WaveFormat::is_valid(self : WaveFormat) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct InfoTag {
   key : String
   value : String
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn InfoTag::new(key : String, value : String) -> InfoTag {
-  { key, value }
+  { key, value, }
 }
 
 ///|
 pub fn InfoTag::empty() -> InfoTag {
-  { key: "", value: "" }
+  { key: "", value: "", }
 }
 
 ///|
@@ -435,20 +443,25 @@ pub fn InfoTag::is_valid(self : InfoTag) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct CuePoint {
-  id : Int
-  position : Int
-  sample_offset : Int
-} derive(Eq, @debug.Debug)
+  id : Int32
+  position : Int32
+  sample_offset : Int32
+}
 
 ///|
-pub fn CuePoint::new(id : Int, position : Int, sample_offset : Int) -> CuePoint {
-  { id, position, sample_offset }
+pub fn CuePoint::new(
+  id : Int32,
+  position : Int32,
+  sample_offset : Int32,
+) -> CuePoint {
+  { id, position, sample_offset, }
 }
 
 ///|
 pub fn CuePoint::empty() -> CuePoint {
-  { id: 0, position: 0, sample_offset: 0 }
+  { id: 0, position: 0, sample_offset: 0, }
 }
 
 ///|
@@ -457,16 +470,17 @@ pub fn CuePoint::is_valid(self : CuePoint) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct WaveInfo {
   duration_seconds : Double
-  frame_count : Int
-  sample_count : Int
-  data_bytes : Int
-} derive(Eq, @debug.Debug)
+  frame_count : Int32
+  sample_count : Int32
+  data_bytes : Int32
+}
 
 ///|
 pub fn WaveInfo::empty() -> WaveInfo {
-  { duration_seconds: 0.0, frame_count: 0, sample_count: 0, data_bytes: 0 }
+  { duration_seconds: 0.0, frame_count: 0, sample_count: 0, data_bytes: 0, }
 }
 
 ///|
@@ -478,17 +492,18 @@ pub fn WaveInfo::is_valid(self : WaveInfo) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct ParsedWav {
   header : RiffHeader
   format : WaveFormat
   chunks : Array[WaveChunk]
   info_tags : Array[InfoTag]
   cue_points : Array[CuePoint]
-  fact_sample_count : Int
-  data_offset : Int
-  data_size : Int
-  source_length : Int
-} derive(Eq, @debug.Debug)
+  fact_sample_count : Int32
+  data_offset : Int32
+  data_size : Int32
+  source_length : Int32
+}
 
 ///|
 pub fn ParsedWav::empty() -> ParsedWav {
@@ -542,20 +557,21 @@ pub fn ParsedWav::is_complete(self : ParsedWav) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct WavParseResult {
   ok : Bool
   wav : ParsedWav
   error : WavError
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn WavParseResult::success(wav : ParsedWav) -> WavParseResult {
-  { ok: true, wav, error: WavError::none() }
+  { ok: true, wav, error: WavError::none(), }
 }
 
 ///|
 pub fn WavParseResult::failure(error : WavError) -> WavParseResult {
-  { ok: false, wav: ParsedWav::empty(), error }
+  { ok: false, wav: ParsedWav::empty(), error, }
 }
 
 ///|
@@ -564,19 +580,20 @@ pub fn WavParseResult::is_ok(self : WavParseResult) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct DecodeOptions {
   normalize : Bool
   clamp : Bool
-  target_channels : Int
-} derive(Eq, @debug.Debug)
+  target_channels : Int32
+}
 
 ///|
 pub fn DecodeOptions::new(
-  normalize? : Bool = true,
-  clamp? : Bool = true,
-  target_channels? : Int = 0,
+  normalize~ : Bool = true,
+  clamp~ : Bool = true,
+  target_channels~ : Int32 = 0,
 ) -> DecodeOptions {
-  { normalize, clamp, target_channels }
+  { normalize, clamp, target_channels, }
 }
 
 ///|
@@ -587,30 +604,31 @@ pub fn DecodeOptions::is_valid(self : DecodeOptions) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct PcmBuffer {
-  channels : Int
-  sample_rate : Int
-  bits_per_sample : Int
-  samples : Array[Int]
-} derive(Eq, @debug.Debug)
+  channels : Int32
+  sample_rate : Int32
+  bits_per_sample : Int32
+  samples : Array[Int32]
+}
 
 ///|
 pub fn PcmBuffer::empty() -> PcmBuffer {
-  { channels: 0, sample_rate: 0, bits_per_sample: 0, samples: [] }
+  { channels: 0, sample_rate: 0, bits_per_sample: 0, samples: [], }
 }
 
 ///|
 pub fn PcmBuffer::new(
-  channels : Int,
-  sample_rate : Int,
-  bits_per_sample : Int,
-  samples : Array[Int],
+  channels : Int32,
+  sample_rate : Int32,
+  bits_per_sample : Int32,
+  samples : Array[Int32],
 ) -> PcmBuffer {
-  { channels, sample_rate, bits_per_sample, samples }
+  { channels, sample_rate, bits_per_sample, samples, }
 }
 
 ///|
-pub fn PcmBuffer::frame_count(self : PcmBuffer) -> Int {
+pub fn PcmBuffer::frame_count(self : PcmBuffer) -> Int32 {
   if self.channels <= 0 {
     0
   } else {
@@ -636,28 +654,29 @@ pub fn PcmBuffer::is_valid(self : PcmBuffer) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct FloatBuffer {
-  channels : Int
-  sample_rate : Int
+  channels : Int32
+  sample_rate : Int32
   samples : Array[Double]
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn FloatBuffer::empty() -> FloatBuffer {
-  { channels: 0, sample_rate: 0, samples: [] }
+  { channels: 0, sample_rate: 0, samples: [], }
 }
 
 ///|
 pub fn FloatBuffer::new(
-  channels : Int,
-  sample_rate : Int,
+  channels : Int32,
+  sample_rate : Int32,
   samples : Array[Double],
 ) -> FloatBuffer {
-  { channels, sample_rate, samples }
+  { channels, sample_rate, samples, }
 }
 
 ///|
-pub fn FloatBuffer::frame_count(self : FloatBuffer) -> Int {
+pub fn FloatBuffer::frame_count(self : FloatBuffer) -> Int32 {
   if self.channels <= 0 {
     0
   } else {
@@ -682,19 +701,20 @@ pub fn FloatBuffer::is_valid(self : FloatBuffer) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct DecodeResult {
   ok : Bool
   pcm : PcmBuffer
   float_buffer : FloatBuffer
   error : WavError
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn DecodeResult::success(
   pcm : PcmBuffer,
   float_buffer : FloatBuffer,
 ) -> DecodeResult {
-  { ok: true, pcm, float_buffer, error: WavError::none() }
+  { ok: true, pcm, float_buffer, error: WavError::none(), }
 }
 
 ///|
@@ -708,16 +728,17 @@ pub fn DecodeResult::failure(error : WavError) -> DecodeResult {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct AudioStats {
   duration_seconds : Double
-  frame_count : Int
-  sample_count : Int
+  frame_count : Int32
+  sample_count : Int32
   peak : Double
   rms : Double
-  silent_samples : Int
-  clipped_samples : Int
+  silent_samples : Int32
+  clipped_samples : Int32
   dc_offset : Double
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn AudioStats::empty() -> AudioStats {
@@ -748,28 +769,30 @@ pub fn AudioStats::silence_ratio(self : AudioStats) -> Double {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct WaveformBucket {
-  index : Int
+  index : Int32
   min : Double
   max : Double
   average_abs : Double
-} derive(Eq, @debug.Debug)
-
-///|
-pub fn WaveformBucket::empty(index : Int) -> WaveformBucket {
-  { index, min: 0.0, max: 0.0, average_abs: 0.0 }
 }
 
 ///|
+pub fn WaveformBucket::empty(index : Int32) -> WaveformBucket {
+  { index, min: 0.0, max: 0.0, average_abs: 0.0, }
+}
+
+///|
+#derive(Eq, @debug.Debug)
 pub(all) struct WaveformSummary {
   buckets : Array[WaveformBucket]
-  bucket_count : Int
-  source_samples : Int
-} derive(Eq, @debug.Debug)
+  bucket_count : Int32
+  source_samples : Int32
+}
 
 ///|
 pub fn WaveformSummary::empty() -> WaveformSummary {
-  { buckets: [], bucket_count: 0, source_samples: 0 }
+  { buckets: [], bucket_count: 0, source_samples: 0, }
 }
 
 ///|

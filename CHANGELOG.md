@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4
+
+- Updated trait derivations for moonc 0.10.20 and preserved public method calls for equality and debug representation.
+- Moved package exclusions to `.moonignore`. The library still has no external runtime dependencies.
+- Check the public PCM example and the JSON report on each supported backend with the stable SDK.
+
 ## 0.1.3
 
 - Clarified runtime dependency and compatibility boundaries in the README.

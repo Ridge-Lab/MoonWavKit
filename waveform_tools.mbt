@@ -1,16 +1,17 @@
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct FrameRange {
-  start_frame : Int
-  frame_count : Int
-} derive(Eq, @debug.Debug)
-
-///|
-pub fn FrameRange::new(start_frame : Int, frame_count : Int) -> FrameRange {
-  { start_frame, frame_count }
+  start_frame : Int32
+  frame_count : Int32
 }
 
 ///|
-pub fn FrameRange::end_frame(self : FrameRange) -> Int {
+pub fn FrameRange::new(start_frame : Int32, frame_count : Int32) -> FrameRange {
+  { start_frame, frame_count, }
+}
+
+///|
+pub fn FrameRange::end_frame(self : FrameRange) -> Int32 {
   self.start_frame + self.frame_count
 }
 
@@ -20,43 +21,46 @@ pub fn FrameRange::is_valid(self : FrameRange) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct WaveformPoint {
-  index : Int
-  start_frame : Int
-  end_frame : Int
+  index : Int32
+  start_frame : Int32
+  end_frame : Int32
   min : Double
   max : Double
   rms : Double
-} derive(Eq, @debug.Debug)
-
-///|
-pub fn WaveformPoint::empty(index : Int) -> WaveformPoint {
-  { index, start_frame: 0, end_frame: 0, min: 0.0, max: 0.0, rms: 0.0 }
 }
 
 ///|
+pub fn WaveformPoint::empty(index : Int32) -> WaveformPoint {
+  { index, start_frame: 0, end_frame: 0, min: 0.0, max: 0.0, rms: 0.0, }
+}
+
+///|
+#derive(Eq, @debug.Debug)
 pub(all) struct AmplitudeBin {
-  index : Int
+  index : Int32
   lower : Double
   upper : Double
-  count : Int
-} derive(Eq, @debug.Debug)
-
-///|
-pub fn AmplitudeBin::empty(index : Int) -> AmplitudeBin {
-  { index, lower: 0.0, upper: 0.0, count: 0 }
+  count : Int32
 }
 
 ///|
+pub fn AmplitudeBin::empty(index : Int32) -> AmplitudeBin {
+  { index, lower: 0.0, upper: 0.0, count: 0, }
+}
+
+///|
+#derive(Eq, @debug.Debug)
 pub(all) struct AmplitudeHistogram {
   bins : Array[AmplitudeBin]
-  sample_count : Int
-  bin_count : Int
-} derive(Eq, @debug.Debug)
+  sample_count : Int32
+  bin_count : Int32
+}
 
 ///|
 pub fn AmplitudeHistogram::empty() -> AmplitudeHistogram {
-  { bins: [], sample_count: 0, bin_count: 0 }
+  { bins: [], sample_count: 0, bin_count: 0, }
 }
 
 ///|
@@ -65,16 +69,17 @@ pub fn AmplitudeHistogram::is_valid(self : AmplitudeHistogram) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct BufferMixResult {
   ok : Bool
-  mixed_frames : Int
+  mixed_frames : Int32
   buffer : FloatBuffer
   error : WavError
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn BufferMixResult::failure(error : WavError) -> BufferMixResult {
-  { ok: false, mixed_frames: 0, buffer: FloatBuffer::empty(), error }
+  { ok: false, mixed_frames: 0, buffer: FloatBuffer::empty(), error, }
 }
 
 ///|
@@ -88,13 +93,14 @@ pub fn BufferMixResult::success(buffer : FloatBuffer) -> BufferMixResult {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct LoopResult {
   ok : Bool
-  repeats : Int
+  repeats : Int32
   source_range : FrameRange
   buffer : FloatBuffer
   error : WavError
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn LoopResult::failure(error : WavError) -> LoopResult {
@@ -109,11 +115,11 @@ pub fn LoopResult::failure(error : WavError) -> LoopResult {
 
 ///|
 pub fn LoopResult::success(
-  repeats : Int,
+  repeats : Int32,
   source_range : FrameRange,
   buffer : FloatBuffer,
 ) -> LoopResult {
-  { ok: true, repeats, source_range, buffer, error: WavError::none() }
+  { ok: true, repeats, source_range, buffer, error: WavError::none(), }
 }
 
 ///|
@@ -132,8 +138,8 @@ fn frame_range_in_buffer(buffer : FloatBuffer, range : FrameRange) -> Bool {
 ///|
 pub fn frame_slice(
   buffer : FloatBuffer,
-  start_frame : Int,
-  frame_count : Int,
+  start_frame : Int32,
+  frame_count : Int32,
 ) -> FloatBuffer {
   let range = FrameRange::new(start_frame, frame_count)
   if !buffer.is_valid() || !frame_range_in_buffer(buffer, range) {
@@ -202,8 +208,8 @@ pub fn append_buffers(a : FloatBuffer, b : FloatBuffer) -> BufferMixResult {
 ///|
 pub fn pad_buffer(
   buffer : FloatBuffer,
-  left_frames? : Int = 0,
-  right_frames? : Int = 0,
+  left_frames~ : Int32 = 0,
+  right_frames~ : Int32 = 0,
 ) -> FloatBuffer {
   if !buffer.is_valid() || left_frames < 0 || right_frames < 0 {
     FloatBuffer::empty()
@@ -226,8 +232,8 @@ pub fn pad_buffer(
 pub fn mix_buffers(
   a : FloatBuffer,
   b : FloatBuffer,
-  gain_a? : Double = 1.0,
-  gain_b? : Double = 1.0,
+  gain_a~ : Double = 1.0,
+  gain_b~ : Double = 1.0,
 ) -> BufferMixResult {
   if !compatible_format(a, b) {
     BufferMixResult::failure(
@@ -254,9 +260,9 @@ pub fn mix_buffers(
 ///|
 pub fn loop_region(
   buffer : FloatBuffer,
-  start_frame : Int,
-  frame_count : Int,
-  repeats : Int,
+  start_frame : Int32,
+  frame_count : Int32,
+  repeats : Int32,
 ) -> LoopResult {
   let range = FrameRange::new(start_frame, frame_count)
   if !buffer.is_valid() || repeats <= 0 || !frame_range_in_buffer(buffer, range) {
@@ -282,7 +288,7 @@ pub fn loop_region(
 ///|
 pub fn waveform_points(
   buffer : FloatBuffer,
-  points : Int,
+  points : Int32,
 ) -> Array[WaveformPoint] {
   if !buffer.is_valid() || points <= 0 || buffer.frame_count() == 0 {
     []
@@ -330,7 +336,7 @@ pub fn waveform_points(
 }
 
 ///|
-fn histogram_index(value : Double, bins : Int) -> Int {
+fn histogram_index(value : Double, bins : Int32) -> Int32 {
   let normalized = (clamp_range(value, -1.0, 1.0) + 1.0) / 2.0
   let raw = (normalized * bins.to_double()).floor().to_int()
   if raw < 0 {
@@ -345,7 +351,7 @@ fn histogram_index(value : Double, bins : Int) -> Int {
 ///|
 pub fn amplitude_histogram(
   buffer : FloatBuffer,
-  bins : Int,
+  bins : Int32,
 ) -> AmplitudeHistogram {
   if !buffer.is_valid() || bins <= 0 {
     AmplitudeHistogram::empty()
@@ -358,14 +364,14 @@ pub fn amplitude_histogram(
     let items = Array::makei(bins, index => {
       let lower = -1.0 + 2.0 * index.to_double() / bins.to_double()
       let upper = -1.0 + 2.0 * (index + 1).to_double() / bins.to_double()
-      { index, lower, upper, count: counts[index] }
+      { index, lower, upper, count: counts[index], }
     })
-    { bins: items, sample_count: buffer.samples.length(), bin_count: bins }
+    { bins: items, sample_count: buffer.samples.length(), bin_count: bins, }
   }
 }
 
 ///|
-fn bar_for_peak(value : Double, width : Int) -> String {
+fn bar_for_peak(value : Double, width : Int32) -> String {
   let filled = rounded_to_int(clamp_range(value, 0.0, 1.0) * width.to_double())
   for i in 0..<width; text = "" {
     if i < filled {
@@ -381,8 +387,8 @@ fn bar_for_peak(value : Double, width : Int) -> String {
 ///|
 pub fn render_waveform_text(
   buffer : FloatBuffer,
-  points? : Int = 16,
-  width? : Int = 12,
+  points~ : Int32 = 16,
+  width~ : Int32 = 12,
 ) -> String {
   if !buffer.is_valid() || points <= 0 || width <= 0 {
     "MoonWavKit waveform: empty"

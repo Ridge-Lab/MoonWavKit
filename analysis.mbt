@@ -80,7 +80,7 @@ pub fn analyze_audio(buffer : FloatBuffer) -> AudioStats {
 ///|
 pub fn summarize_waveform(
   buffer : FloatBuffer,
-  buckets : Int,
+  buckets : Int32,
 ) -> WaveformSummary {
   if !buffer.is_valid() || buckets <= 0 || buffer.samples.length() == 0 {
     WaveformSummary::empty()
@@ -117,15 +117,15 @@ pub fn summarize_waveform(
         average_abs: abs_sum / (real_end - start).to_double(),
       }
     })
-    { buckets: bucket_values, bucket_count: safe_buckets, source_samples }
+    { buckets: bucket_values, bucket_count: safe_buckets, source_samples, }
   }
 }
 
 ///|
 pub fn detect_silence_regions(
   buffer : FloatBuffer,
-  min_run : Int,
-  threshold? : Double = 0.0001,
+  min_run : Int32,
+  threshold~ : Double = 0.0001,
 ) -> Array[WaveChunk] {
   if !buffer.is_valid() || min_run <= 0 {
     []

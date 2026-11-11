@@ -1,15 +1,16 @@
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct InfoCatalog {
   title : String
   artist : String
   comment : String
   software : String
   raw_tags : Array[InfoTag]
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn InfoCatalog::empty() -> InfoCatalog {
-  { title: "", artist: "", comment: "", software: "", raw_tags: [] }
+  { title: "", artist: "", comment: "", software: "", raw_tags: [], }
 }
 
 ///|
@@ -27,14 +28,15 @@ pub fn InfoCatalog::display_title(self : InfoCatalog) -> String {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct CueTimeline {
-  count : Int
-  first_sample : Int
-  last_sample : Int
-  sample_rate : Int
+  count : Int32
+  first_sample : Int32
+  last_sample : Int32
+  sample_rate : Int32
   duration_seconds : Double
   cue_points : Array[CuePoint]
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn CueTimeline::empty() -> CueTimeline {
@@ -54,16 +56,17 @@ pub fn CueTimeline::is_empty(self : CueTimeline) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct FormatSummary {
   encoding : String
-  channels : Int
-  sample_rate : Int
-  bits_per_sample : Int
-  frame_count : Int
+  channels : Int32
+  sample_rate : Int32
+  bits_per_sample : Int32
+  frame_count : Int32
   duration_seconds : Double
-  byte_rate : Int
-  data_bytes : Int
-} derive(Eq, @debug.Debug)
+  byte_rate : Int32
+  data_bytes : Int32
+}
 
 ///|
 pub fn FormatSummary::empty() -> FormatSummary {
@@ -115,7 +118,7 @@ pub fn collect_info_catalog(wav : ParsedWav) -> InfoCatalog {
 }
 
 ///|
-pub fn cue_sample_offsets(wav : ParsedWav) -> Array[Int] {
+pub fn cue_sample_offsets(wav : ParsedWav) -> Array[Int32] {
   Array::makei(wav.cue_points.length(), i => wav.cue_points[i].sample_offset)
 }
 
@@ -221,7 +224,7 @@ pub fn describe_wav(wav : ParsedWav) -> String {
 }
 
 ///|
-pub fn parse_and_describe(bytes : Array[Int]) -> String {
+pub fn parse_and_describe(bytes : Array[Int32]) -> String {
   let parsed = parse_wav(bytes)
   if !parsed.ok {
     "MoonWavKit description\nerror: \{parsed.error.code()}"

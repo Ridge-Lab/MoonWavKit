@@ -15,6 +15,10 @@ test "parse riff header fmt and data chunks" {
   assert_eq(parsed.wav.header.riff_id, "RIFF")
   assert_eq(parsed.wav.header.wave_id, "WAVE")
   assert_true(parsed.wav.format.encoding == @moonwavkit.EncodingPcm)
+  // 0.1.3 clients can also call the derived methods directly.
+  assert_true(parsed.wav.format.encoding.equal(@moonwavkit.EncodingPcm))
+  assert_false(parsed.wav.format.encoding.not_equal(@moonwavkit.EncodingPcm))
+  assert_eq(parsed.wav.format.encoding.to_repr().to_string(), "EncodingPcm")
   assert_eq(parsed.wav.format.channels, 1)
   assert_eq(parsed.wav.format.sample_rate, 8000)
   assert_eq(parsed.wav.format.bits_per_sample, 16)

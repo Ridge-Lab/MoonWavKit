@@ -1,11 +1,12 @@
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) enum AudioRegionKind {
   RegionSilence
   RegionQuiet
   RegionSignal
   RegionLoud
   RegionClipping
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn AudioRegionKind::label(self : AudioRegionKind) -> String {
@@ -27,15 +28,16 @@ pub fn AudioRegionKind::is_problem(self : AudioRegionKind) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct AudioRegion {
   kind : AudioRegionKind
-  start_frame : Int
-  frame_count : Int
-  channels : Int
-  sample_rate : Int
+  start_frame : Int32
+  frame_count : Int32
+  channels : Int32
+  sample_rate : Int32
   peak : Double
   rms : Double
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn AudioRegion::empty(kind : AudioRegionKind) -> AudioRegion {
@@ -51,7 +53,7 @@ pub fn AudioRegion::empty(kind : AudioRegionKind) -> AudioRegion {
 }
 
 ///|
-pub fn AudioRegion::end_frame(self : AudioRegion) -> Int {
+pub fn AudioRegion::end_frame(self : AudioRegion) -> Int32 {
   self.start_frame + self.frame_count
 }
 
@@ -73,18 +75,19 @@ pub fn AudioRegion::is_valid(self : AudioRegion) -> Bool {
 }
 
 ///|
-pub fn AudioRegion::contains_frame(self : AudioRegion, frame : Int) -> Bool {
+pub fn AudioRegion::contains_frame(self : AudioRegion, frame : Int32) -> Bool {
   frame >= self.start_frame && frame < self.end_frame()
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct AudioSegmentOptions {
   silence_threshold : Double
   quiet_threshold : Double
   loud_threshold : Double
   clipping_threshold : Double
-  min_region_frames : Int
-} derive(Eq, @debug.Debug)
+  min_region_frames : Int32
+}
 
 ///|
 pub fn AudioSegmentOptions::default() -> AudioSegmentOptions {
@@ -111,7 +114,7 @@ pub fn AudioSegmentOptions::game_asset() -> AudioSegmentOptions {
 ///|
 pub fn AudioSegmentOptions::with_min_region_frames(
   self : AudioSegmentOptions,
-  min_region_frames : Int,
+  min_region_frames : Int32,
 ) -> AudioSegmentOptions {
   {
     silence_threshold: self.silence_threshold,
@@ -123,26 +126,27 @@ pub fn AudioSegmentOptions::with_min_region_frames(
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct AudioSegmentation {
   ok : Bool
   regions : Array[AudioRegion]
-  source_frames : Int
-  channels : Int
-  sample_rate : Int
-} derive(Eq, @debug.Debug)
-
-///|
-pub fn AudioSegmentation::empty() -> AudioSegmentation {
-  { ok: false, regions: [], source_frames: 0, channels: 0, sample_rate: 0 }
+  source_frames : Int32
+  channels : Int32
+  sample_rate : Int32
 }
 
 ///|
-pub fn AudioSegmentation::region_count(self : AudioSegmentation) -> Int {
+pub fn AudioSegmentation::empty() -> AudioSegmentation {
+  { ok: false, regions: [], source_frames: 0, channels: 0, sample_rate: 0, }
+}
+
+///|
+pub fn AudioSegmentation::region_count(self : AudioSegmentation) -> Int32 {
   self.regions.length()
 }
 
 ///|
-pub fn AudioSegmentation::problem_count(self : AudioSegmentation) -> Int {
+pub fn AudioSegmentation::problem_count(self : AudioSegmentation) -> Int32 {
   for region in self.regions; count = 0 {
     if region.kind.is_problem() {
       continue count + 1
@@ -158,7 +162,7 @@ pub fn AudioSegmentation::problem_count(self : AudioSegmentation) -> Int {
 pub fn AudioSegmentation::frames_for_kind(
   self : AudioSegmentation,
   kind : AudioRegionKind,
-) -> Int {
+) -> Int32 {
   for region in self.regions; frames = 0 {
     if region.kind == kind {
       continue frames + region.frame_count
@@ -218,7 +222,7 @@ pub fn AudioSegmentation::longest_region_of_kind(
 ///|
 pub fn segment_audio(
   buffer : FloatBuffer,
-  options? : AudioSegmentOptions = AudioSegmentOptions::default(),
+  options~ : AudioSegmentOptions = AudioSegmentOptions::default(),
 ) -> AudioSegmentation {
   if !buffer.is_valid() || buffer.frame_count() == 0 {
     AudioSegmentation::empty()
@@ -264,8 +268,8 @@ pub fn segment_audio(
 ///|
 pub fn silence_regions(
   buffer : FloatBuffer,
-  min_region_frames? : Int = 1,
-  threshold? : Double = 0.0001,
+  min_region_frames~ : Int32 = 1,
+  threshold~ : Double = 0.0001,
 ) -> Array[AudioRegion] {
   let report = segment_audio(buffer, options={
     silence_threshold: threshold,
@@ -280,8 +284,8 @@ pub fn silence_regions(
 ///|
 pub fn clipping_regions(
   buffer : FloatBuffer,
-  min_region_frames? : Int = 1,
-  threshold? : Double = 0.999,
+  min_region_frames~ : Int32 = 1,
+  threshold~ : Double = 0.999,
 ) -> Array[AudioRegion] {
   let report = segment_audio(buffer, options={
     silence_threshold: 0.0001,
@@ -357,7 +361,7 @@ fn normalize_segment_options(
 ///|
 fn classify_audio_frame(
   buffer : FloatBuffer,
-  frame : Int,
+  frame : Int32,
   options : AudioSegmentOptions,
 ) -> AudioRegionKind {
   let peak = frame_peak(buffer, frame)
@@ -375,7 +379,7 @@ fn classify_audio_frame(
 }
 
 ///|
-fn frame_peak(buffer : FloatBuffer, frame : Int) -> Double {
+fn frame_peak(buffer : FloatBuffer, frame : Int32) -> Double {
   for channel in 0..<buffer.channels; peak = 0.0 {
     let sample = buffer.samples[frame * buffer.channels + channel]
     continue max_double(peak, abs_double(sample))
@@ -389,9 +393,9 @@ fn push_region_if_long_enough(
   regions : Array[AudioRegion],
   buffer : FloatBuffer,
   kind : AudioRegionKind,
-  start_frame : Int,
-  end_frame : Int,
-  min_region_frames : Int,
+  start_frame : Int32,
+  end_frame : Int32,
+  min_region_frames : Int32,
 ) -> Unit {
   let frame_count = end_frame - start_frame
   if frame_count >= min_region_frames {
@@ -403,8 +407,8 @@ fn push_region_if_long_enough(
 fn build_audio_region(
   buffer : FloatBuffer,
   kind : AudioRegionKind,
-  start_frame : Int,
-  end_frame : Int,
+  start_frame : Int32,
+  end_frame : Int32,
 ) -> AudioRegion {
   let sample_start = start_frame * buffer.channels
   let sample_end = end_frame * buffer.channels

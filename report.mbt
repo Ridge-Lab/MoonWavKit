@@ -1,8 +1,9 @@
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) enum ReportFormat {
   ReportText
   ReportJson
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn ReportFormat::label(self : ReportFormat) -> String {
@@ -13,21 +14,22 @@ pub fn ReportFormat::label(self : ReportFormat) -> String {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct WavReport {
   ok : Bool
   title : String
   encoding : String
-  channels : Int
-  sample_rate : Int
-  bits_per_sample : Int
+  channels : Int32
+  sample_rate : Int32
+  bits_per_sample : Int32
   duration_seconds : Double
-  frame_count : Int
-  chunk_count : Int
+  frame_count : Int32
+  chunk_count : Int32
   peak : Double
   rms : Double
   quality : String
   error_code : String
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn WavReport::empty() -> WavReport {
@@ -68,7 +70,7 @@ pub fn WavReport::failure(error_code : String) -> WavReport {
 }
 
 ///|
-pub fn build_report(bytes : Array[Int]) -> WavReport {
+pub fn build_report(bytes : Array[Int32]) -> WavReport {
   let parsed = parse_wav(bytes)
   if !parsed.ok {
     WavReport::failure(parsed.error.code())
@@ -124,6 +126,6 @@ pub fn WavReport::render(self : WavReport, format : ReportFormat) -> String {
 }
 
 ///|
-pub fn wavinfo_fixture_report(format? : ReportFormat = ReportText) -> String {
+pub fn wavinfo_fixture_report(format~ : ReportFormat = ReportText) -> String {
   build_report(fixture_pcm16_mono()).render(format)
 }

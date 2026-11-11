@@ -1,5 +1,5 @@
 ///|
-fn riff_prefix(total_minus_8 : Int) -> Array[Int] {
+fn riff_prefix(total_minus_8 : Int32) -> Array[Int32] {
   [
     82,
     73,
@@ -18,11 +18,11 @@ fn riff_prefix(total_minus_8 : Int) -> Array[Int] {
 
 ///|
 fn fmt_chunk(
-  audio_format : Int,
-  channels : Int,
-  sample_rate : Int,
-  bits : Int,
-) -> Array[Int] {
+  audio_format : Int32,
+  channels : Int32,
+  sample_rate : Int32,
+  bits : Int32,
+) -> Array[Int32] {
   let block_align = channels * bits / 8
   let byte_rate = sample_rate * block_align
   [
@@ -54,7 +54,7 @@ fn fmt_chunk(
 }
 
 ///|
-fn data_chunk(data : Array[Int]) -> Array[Int] {
+fn data_chunk(data : Array[Int32]) -> Array[Int32] {
   let size = data.length()
   let out = [
     100,
@@ -76,8 +76,8 @@ fn data_chunk(data : Array[Int]) -> Array[Int] {
 }
 
 ///|
-fn concat_arrays(a : Array[Int], b : Array[Int]) -> Array[Int] {
-  let out : Array[Int] = []
+fn concat_arrays(a : Array[Int32], b : Array[Int32]) -> Array[Int32] {
+  let out : Array[Int32] = []
   for value in a {
     out.push(value)
   }
@@ -88,40 +88,44 @@ fn concat_arrays(a : Array[Int], b : Array[Int]) -> Array[Int] {
 }
 
 ///|
-fn concat3(a : Array[Int], b : Array[Int], c : Array[Int]) -> Array[Int] {
+fn concat3(
+  a : Array[Int32],
+  b : Array[Int32],
+  c : Array[Int32],
+) -> Array[Int32] {
   concat_arrays(concat_arrays(a, b), c)
 }
 
 ///|
-pub fn fixture_pcm16_mono() -> Array[Int] {
+pub fn fixture_pcm16_mono() -> Array[Int32] {
   let payload = [0, 0, 255, 127, 0, 128, 0, 64]
   let body = concat_arrays(fmt_chunk(1, 1, 8000, 16), data_chunk(payload))
   concat_arrays(riff_prefix(4 + body.length()), body)
 }
 
 ///|
-pub fn fixture_pcm8_stereo() -> Array[Int] {
+pub fn fixture_pcm8_stereo() -> Array[Int32] {
   let payload = [128, 128, 255, 0, 192, 64, 128, 128]
   let body = concat_arrays(fmt_chunk(1, 2, 11025, 8), data_chunk(payload))
   concat_arrays(riff_prefix(4 + body.length()), body)
 }
 
 ///|
-pub fn fixture_pcm24_mono() -> Array[Int] {
+pub fn fixture_pcm24_mono() -> Array[Int32] {
   let payload = [0, 0, 0, 255, 255, 127, 0, 0, 128]
   let body = concat_arrays(fmt_chunk(1, 1, 48000, 24), data_chunk(payload))
   concat_arrays(riff_prefix(4 + body.length()), body)
 }
 
 ///|
-pub fn fixture_float32_mono() -> Array[Int] {
+pub fn fixture_float32_mono() -> Array[Int32] {
   let payload = [0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 191]
   let body = concat_arrays(fmt_chunk(3, 1, 44100, 32), data_chunk(payload))
   concat_arrays(riff_prefix(4 + body.length()), body)
 }
 
 ///|
-pub fn fixture_with_info_and_cue() -> Array[Int] {
+pub fn fixture_with_info_and_cue() -> Array[Int32] {
   let info_payload = [
     73, 78, 70, 79, 73, 78, 65, 77, 5, 0, 0, 0, 116, 111, 110, 101, 0, 0,
   ]
@@ -162,25 +166,25 @@ pub fn fixture_with_info_and_cue() -> Array[Int] {
 }
 
 ///|
-pub fn fixture_not_riff() -> Array[Int] {
+pub fn fixture_not_riff() -> Array[Int32] {
   [78, 79, 80, 69, 0, 0, 0, 0, 87, 65, 86, 69]
 }
 
 ///|
-pub fn fixture_missing_data() -> Array[Int] {
+pub fn fixture_missing_data() -> Array[Int32] {
   let body = fmt_chunk(1, 1, 8000, 16)
   concat_arrays(riff_prefix(4 + body.length()), body)
 }
 
 ///|
-pub fn fixture_unsupported_alaw() -> Array[Int] {
+pub fn fixture_unsupported_alaw() -> Array[Int32] {
   let payload = [0, 1, 2, 3]
   let body = concat_arrays(fmt_chunk(6, 1, 8000, 8), data_chunk(payload))
   concat_arrays(riff_prefix(4 + body.length()), body)
 }
 
 ///|
-pub fn fixture_truncated_data() -> Array[Int] {
+pub fn fixture_truncated_data() -> Array[Int32] {
   let payload = [0, 0, 1]
   let body = concat_arrays(fmt_chunk(1, 1, 8000, 16), data_chunk(payload))
   concat_arrays(riff_prefix(4 + body.length()), body)

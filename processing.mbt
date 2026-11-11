@@ -1,13 +1,14 @@
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) enum PcmEncoding {
   PcmU8
   PcmS16
   PcmS24
   PcmS32
-} derive(Eq, @debug.Debug)
+}
 
 ///|
-pub fn PcmEncoding::bits_per_sample(self : PcmEncoding) -> Int {
+pub fn PcmEncoding::bits_per_sample(self : PcmEncoding) -> Int32 {
   match self {
     PcmU8 => 8
     PcmS16 => 16
@@ -27,23 +28,24 @@ pub fn PcmEncoding::label(self : PcmEncoding) -> String {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct SampleRegion {
-  start : Int
-  length : Int
+  start : Int32
+  length : Int32
   threshold : Double
-} derive(Eq, @debug.Debug)
-
-///|
-pub fn SampleRegion::new(
-  start : Int,
-  length : Int,
-  threshold? : Double = 0.0,
-) -> SampleRegion {
-  { start, length, threshold }
 }
 
 ///|
-pub fn SampleRegion::end_exclusive(self : SampleRegion) -> Int {
+pub fn SampleRegion::new(
+  start : Int32,
+  length : Int32,
+  threshold~ : Double = 0.0,
+) -> SampleRegion {
+  { start, length, threshold, }
+}
+
+///|
+pub fn SampleRegion::end_exclusive(self : SampleRegion) -> Int32 {
   self.start + self.length
 }
 
@@ -53,17 +55,18 @@ pub fn SampleRegion::is_valid(self : SampleRegion) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct ChannelStats {
-  channel : Int
+  channel : Int32
   peak : Double
   rms : Double
   average : Double
-  silent_samples : Int
-  clipped_samples : Int
-} derive(Eq, @debug.Debug)
+  silent_samples : Int32
+  clipped_samples : Int32
+}
 
 ///|
-pub fn ChannelStats::empty(channel : Int) -> ChannelStats {
+pub fn ChannelStats::empty(channel : Int32) -> ChannelStats {
   {
     channel,
     peak: 0.0,
@@ -75,6 +78,7 @@ pub fn ChannelStats::empty(channel : Int) -> ChannelStats {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct NormalizeReport {
   ok : Bool
   gain : Double
@@ -83,7 +87,7 @@ pub(all) struct NormalizeReport {
   after_peak : Double
   buffer : FloatBuffer
   error : WavError
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn NormalizeReport::failure(error : WavError) -> NormalizeReport {
@@ -118,15 +122,16 @@ pub fn NormalizeReport::success(
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct TrimResult {
   ok : Bool
-  start_frame : Int
-  end_frame : Int
-  removed_start_frames : Int
-  removed_end_frames : Int
+  start_frame : Int32
+  end_frame : Int32
+  removed_start_frames : Int32
+  removed_end_frames : Int32
   buffer : FloatBuffer
   error : WavError
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn TrimResult::failure(error : WavError) -> TrimResult {
@@ -143,9 +148,9 @@ pub fn TrimResult::failure(error : WavError) -> TrimResult {
 
 ///|
 pub fn TrimResult::success(
-  start_frame : Int,
-  end_frame : Int,
-  source_frames : Int,
+  start_frame : Int32,
+  end_frame : Int32,
+  source_frames : Int32,
   buffer : FloatBuffer,
 ) -> TrimResult {
   {
@@ -160,15 +165,16 @@ pub fn TrimResult::success(
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct ResampleResult {
   ok : Bool
-  source_sample_rate : Int
-  target_sample_rate : Int
-  source_frames : Int
-  target_frames : Int
+  source_sample_rate : Int32
+  target_sample_rate : Int32
+  source_frames : Int32
+  target_frames : Int32
   buffer : FloatBuffer
   error : WavError
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn ResampleResult::failure(error : WavError) -> ResampleResult {
@@ -185,9 +191,9 @@ pub fn ResampleResult::failure(error : WavError) -> ResampleResult {
 
 ///|
 pub fn ResampleResult::success(
-  source_sample_rate : Int,
-  target_sample_rate : Int,
-  source_frames : Int,
+  source_sample_rate : Int32,
+  target_sample_rate : Int32,
+  source_frames : Int32,
   buffer : FloatBuffer,
 ) -> ResampleResult {
   {
@@ -202,39 +208,41 @@ pub fn ResampleResult::success(
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct ByteEncodeResult {
   ok : Bool
   encoding : PcmEncoding
-  bytes : Array[Int]
+  bytes : Array[Int32]
   error : WavError
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn ByteEncodeResult::failure(
   encoding : PcmEncoding,
   error : WavError,
 ) -> ByteEncodeResult {
-  { ok: false, encoding, bytes: [], error }
+  { ok: false, encoding, bytes: [], error, }
 }
 
 ///|
 pub fn ByteEncodeResult::success(
   encoding : PcmEncoding,
-  bytes : Array[Int],
+  bytes : Array[Int32],
 ) -> ByteEncodeResult {
-  { ok: true, encoding, bytes, error: WavError::none() }
+  { ok: true, encoding, bytes, error: WavError::none(), }
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct AudioFingerprint {
-  frame_count : Int
-  sample_rate : Int
-  channels : Int
-  peak_milli : Int
-  rms_milli : Int
-  zero_crossings : Int
-  checksum : Int
-} derive(Eq, @debug.Debug)
+  frame_count : Int32
+  sample_rate : Int32
+  channels : Int32
+  peak_milli : Int32
+  rms_milli : Int32
+  zero_crossings : Int32
+  checksum : Int32
+}
 
 ///|
 pub fn AudioFingerprint::empty() -> AudioFingerprint {
@@ -261,14 +269,14 @@ fn clamp_range(value : Double, low : Double, high : Double) -> Double {
 }
 
 ///|
-fn rounded_to_int(value : Double) -> Int {
+fn rounded_to_int(value : Double) -> Int32 {
   value.round().to_int()
 }
 
 ///|
 fn sample_frame_has_signal(
   buffer : FloatBuffer,
-  frame : Int,
+  frame : Int32,
   threshold : Double,
 ) -> Bool {
   for channel in 0..<buffer.channels {
@@ -284,8 +292,8 @@ fn sample_frame_has_signal(
 ///|
 fn copy_frames(
   buffer : FloatBuffer,
-  start_frame : Int,
-  end_frame : Int,
+  start_frame : Int32,
+  end_frame : Int32,
 ) -> Array[Double] {
   let frame_count = if end_frame > start_frame {
     end_frame - start_frame
@@ -300,9 +308,9 @@ fn copy_frames(
 
 ///|
 pub fn make_silence(
-  channels : Int,
-  sample_rate : Int,
-  frames : Int,
+  channels : Int32,
+  sample_rate : Int32,
+  frames : Int32,
 ) -> FloatBuffer {
   if channels <= 0 || sample_rate <= 0 || frames < 0 {
     FloatBuffer::empty()
@@ -346,7 +354,7 @@ pub fn clamp_buffer(buffer : FloatBuffer) -> FloatBuffer {
 ///|
 pub fn normalize_peak(
   buffer : FloatBuffer,
-  target_peak? : Double = 0.95,
+  target_peak~ : Double = 0.95,
 ) -> NormalizeReport {
   if !buffer.is_valid() {
     NormalizeReport::failure(
@@ -375,8 +383,8 @@ pub fn normalize_peak(
 ///|
 pub fn trim_silence(
   buffer : FloatBuffer,
-  threshold? : Double = 0.0001,
-  keep_frames? : Int = 0,
+  threshold~ : Double = 0.0001,
+  keep_frames~ : Int32 = 0,
 ) -> TrimResult {
   if !buffer.is_valid() {
     TrimResult::failure(
@@ -452,7 +460,7 @@ pub fn reverse_audio(buffer : FloatBuffer) -> FloatBuffer {
 fn interpolate_channel(
   buffer : FloatBuffer,
   position : Double,
-  channel : Int,
+  channel : Int32,
 ) -> Double {
   let frames = buffer.frame_count()
   if frames == 0 {
@@ -470,7 +478,7 @@ fn interpolate_channel(
 ///|
 pub fn resample_linear(
   buffer : FloatBuffer,
-  target_sample_rate : Int,
+  target_sample_rate : Int32,
 ) -> ResampleResult {
   if !buffer.is_valid() {
     ResampleResult::failure(
@@ -519,8 +527,8 @@ pub fn resample_linear(
 ///|
 pub fn channel_stats(
   buffer : FloatBuffer,
-  silence_threshold? : Double = 0.0001,
-  clip_threshold? : Double = 0.999,
+  silence_threshold~ : Double = 0.0001,
+  clip_threshold~ : Double = 0.999,
 ) -> Array[ChannelStats] {
   if !buffer.is_valid() {
     []
@@ -579,7 +587,7 @@ pub fn channel_stats(
 }
 
 ///|
-pub fn zero_crossing_count(buffer : FloatBuffer) -> Int {
+pub fn zero_crossing_count(buffer : FloatBuffer) -> Int32 {
   if !buffer.is_valid() || buffer.samples.length() <= buffer.channels {
     0
   } else {
@@ -626,7 +634,7 @@ pub fn crest_factor(buffer : FloatBuffer) -> Double {
 fn region_scan(
   samples : Array[Double],
   threshold : Double,
-  min_run : Int,
+  min_run : Int32,
   want_above : Bool,
 ) -> Array[SampleRegion] {
   let regions : Array[SampleRegion] = []
@@ -659,8 +667,8 @@ fn region_scan(
 ///|
 pub fn detect_silence_sample_regions(
   buffer : FloatBuffer,
-  min_run : Int,
-  threshold? : Double = 0.0001,
+  min_run : Int32,
+  threshold~ : Double = 0.0001,
 ) -> Array[SampleRegion] {
   if !buffer.is_valid() || min_run <= 0 || threshold < 0.0 {
     []
@@ -672,8 +680,8 @@ pub fn detect_silence_sample_regions(
 ///|
 pub fn find_clipping_regions(
   buffer : FloatBuffer,
-  min_run? : Int = 1,
-  threshold? : Double = 0.999,
+  min_run~ : Int32 = 1,
+  threshold~ : Double = 0.999,
 ) -> Array[SampleRegion] {
   if !buffer.is_valid() || min_run <= 0 || threshold <= 0.0 {
     []
@@ -683,7 +691,7 @@ pub fn find_clipping_regions(
 }
 
 ///|
-fn encode_sample_to_int(sample : Double, encoding : PcmEncoding) -> Int {
+fn encode_sample_to_int(sample : Double, encoding : PcmEncoding) -> Int32 {
   let clamped = clamp_range(sample, -1.0, 1.0)
   match encoding {
     PcmU8 => rounded_to_int(clamped * 127.0 + 128.0)
@@ -694,13 +702,13 @@ fn encode_sample_to_int(sample : Double, encoding : PcmEncoding) -> Int {
 }
 
 ///|
-fn push_u16_le(out : Array[Int], value : Int) -> Unit {
+fn push_u16_le(out : Array[Int32], value : Int32) -> Unit {
   out.push(value & 0xff)
   out.push((value >> 8) & 0xff)
 }
 
 ///|
-fn push_u32_le(out : Array[Int], value : Int) -> Unit {
+fn push_u32_le(out : Array[Int32], value : Int32) -> Unit {
   out.push(value & 0xff)
   out.push((value >> 8) & 0xff)
   out.push((value >> 16) & 0xff)
@@ -709,7 +717,7 @@ fn push_u32_le(out : Array[Int], value : Int) -> Unit {
 
 ///|
 fn push_pcm_sample(
-  out : Array[Int],
+  out : Array[Int32],
   sample : Double,
   encoding : PcmEncoding,
 ) -> Unit {
@@ -745,7 +753,7 @@ pub fn encode_float_to_pcm_bytes(
       WavError::new(ErrorInvalidArgument, "invalid float buffer"),
     )
   } else {
-    let out : Array[Int] = []
+    let out : Array[Int32] = []
     for sample in buffer.samples {
       push_pcm_sample(out, sample, encoding)
     }
@@ -756,7 +764,7 @@ pub fn encode_float_to_pcm_bytes(
 ///|
 pub fn build_wav_from_float(
   buffer : FloatBuffer,
-  encoding? : PcmEncoding = PcmS16,
+  encoding~ : PcmEncoding = PcmS16,
 ) -> ByteEncodeResult {
   let encoded = encode_float_to_pcm_bytes(buffer, encoding)
   if !encoded.ok {
@@ -767,7 +775,7 @@ pub fn build_wav_from_float(
     let byte_rate = buffer.sample_rate * block_align
     let data_size = encoded.bytes.length()
     let riff_size = 4 + 8 + 16 + 8 + data_size
-    let out : Array[Int] = []
+    let out : Array[Int32] = []
     out.push(82)
     out.push(73)
     out.push(70)

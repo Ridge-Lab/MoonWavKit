@@ -20,7 +20,7 @@ moon run examples/basic
 
 ## Release Checklist
 
-1. 更新 `moon.mod` 版本，并同步 README、CHANGELOG 和申报材料中的版本号。
+1. 更新 `moon.mod` 版本，并同步 README 和 CHANGELOG 中的版本号。
 2. 运行格式检查、全目标检查、测试、覆盖率、公开接口检查和示例。
 3. 使用 `moon package --list` 确认发布包不包含申报材料、个人信息或本地工具。
 4. 运行 `moon publish --dry-run`，确认打包后的模块仍能通过 `moon check`。

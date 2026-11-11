@@ -56,7 +56,7 @@ fn parse_format(reader : ByteReader, chunk : WaveChunk) -> WaveFormat {
 }
 
 ///|
-fn ascii_value_at(reader : ByteReader, offset : Int, size : Int) -> String {
+fn ascii_value_at(reader : ByteReader, offset : Int32, size : Int32) -> String {
   if size <= 0 || !reader.slice_can_read(offset, size) {
     ""
   } else {
@@ -128,7 +128,7 @@ fn parse_cue_points(reader : ByteReader, chunk : WaveChunk) -> Array[CuePoint] {
 }
 
 ///|
-fn parse_fact_sample_count(reader : ByteReader, chunk : WaveChunk) -> Int {
+fn parse_fact_sample_count(reader : ByteReader, chunk : WaveChunk) -> Int32 {
   if chunk.size >= 4 && reader.slice_can_read(chunk.data_offset, 4) {
     reader.u32_le_at(chunk.data_offset)
   } else {
@@ -147,7 +147,7 @@ fn validate_chunk_bounds(reader : ByteReader, chunk : WaveChunk) -> Bool {
 ///|
 /// Parse a RIFF/WAVE byte array into structural metadata. The parser skips
 /// unknown chunks while preserving their id and bounds.
-pub fn parse_wav(bytes : Array[Int]) -> WavParseResult {
+pub fn parse_wav(bytes : Array[Int32]) -> WavParseResult {
   let reader = ByteReader::new(bytes)
   let header_result = parse_header(reader)
   if !header_result.ok {
@@ -223,7 +223,7 @@ pub fn parse_wav(bytes : Array[Int]) -> WavParseResult {
 }
 
 ///|
-pub fn validate_wav(bytes : Array[Int]) -> WavError {
+pub fn validate_wav(bytes : Array[Int32]) -> WavError {
   let parsed = parse_wav(bytes)
   if !parsed.ok {
     parsed.error

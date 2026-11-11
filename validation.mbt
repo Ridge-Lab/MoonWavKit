@@ -1,9 +1,10 @@
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) enum ValidationSeverity {
   SeverityInfo
   SeverityWarning
   SeverityError
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn ValidationSeverity::label(self : ValidationSeverity) -> String {
@@ -15,21 +16,22 @@ pub fn ValidationSeverity::label(self : ValidationSeverity) -> String {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct ValidationIssue {
   severity : ValidationSeverity
   code : String
   message : String
-  offset : Int
-} derive(Eq, @debug.Debug)
+  offset : Int32
+}
 
 ///|
 pub fn ValidationIssue::new(
   severity : ValidationSeverity,
   code : String,
   message : String,
-  offset? : Int = 0,
+  offset~ : Int32 = 0,
 ) -> ValidationIssue {
-  { severity, code, message, offset }
+  { severity, code, message, offset, }
 }
 
 ///|
@@ -38,13 +40,14 @@ pub fn ValidationIssue::is_error(self : ValidationIssue) -> Bool {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct ChunkSummary {
   id : String
-  offset : Int
-  data_offset : Int
-  size : Int
+  offset : Int32
+  data_offset : Int32
+  size : Int32
   known : Bool
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn ChunkSummary::from_chunk(chunk : WaveChunk) -> ChunkSummary {
@@ -58,16 +61,17 @@ pub fn ChunkSummary::from_chunk(chunk : WaveChunk) -> ChunkSummary {
 }
 
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) struct ValidationReport {
   ok : Bool
-  error_count : Int
-  warning_count : Int
-  info_count : Int
+  error_count : Int32
+  warning_count : Int32
+  info_count : Int32
   format : WaveFormat
   info : WaveInfo
   issues : Array[ValidationIssue]
   chunks : Array[ChunkSummary]
-} derive(Eq, @debug.Debug)
+}
 
 ///|
 pub fn ValidationReport::empty() -> ValidationReport {
@@ -97,7 +101,7 @@ pub fn ValidationReport::has_warnings(self : ValidationReport) -> Bool {
 fn count_severity(
   issues : Array[ValidationIssue],
   severity : ValidationSeverity,
-) -> Int {
+) -> Int32 {
   for issue in issues; count = 0 {
     if issue.severity == severity {
       continue count + 1
@@ -281,7 +285,7 @@ fn validation_report_from_wav(
 }
 
 ///|
-pub fn validate_wav_detailed(bytes : Array[Int]) -> ValidationReport {
+pub fn validate_wav_detailed(bytes : Array[Int32]) -> ValidationReport {
   let parsed = parse_wav(bytes)
   let issues : Array[ValidationIssue] = []
   if !parsed.ok {
