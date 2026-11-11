@@ -10,7 +10,8 @@ tmp/
 
 # Development and submission files are not part of the published library.
 /submission/
-/tools/
+/tools/create_proposal.py
+__pycache__/
 /docs/SUBMISSION.md
 /AGENTS.md
 /.github/

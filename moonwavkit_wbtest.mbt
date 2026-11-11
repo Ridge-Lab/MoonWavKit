@@ -56,3 +56,42 @@ test "invalid float buffer returns empty analysis" {
   assert_eq(stats_quality_label(stats), "empty")
   assert_eq(summarize_waveform(FloatBuffer::empty(), 8).bucket_count, 0)
 }
+
+///|
+test "empty data chunk has zero frames" {
+  let body = concat_arrays(fmt_chunk(1, 1, 8000, 16), data_chunk([]))
+  let result = parse_and_decode(
+    concat_arrays(riff_prefix(4 + body.length()), body),
+  )
+  assert_true(result.ok)
+  assert_eq(result.float_buffer.frame_count(), 0)
+}
+
+///|
+test "read ranges reject signed wraparound" {
+  let reader = ByteReader::at([0], 2147483647)
+  assert_false(reader.can_read(1))
+  assert_false(reader.slice_can_read(1, 2147483647))
+}
+
+///|
+test "LIST lengths cannot move the metadata cursor backwards" {
+  let fmt = fmt_chunk(1, 1, 8000, 16)
+  let list = [
+    76, 73, 83, 84, 12, 0, 0, 0, 73, 78, 70, 79, 73, 78, 65, 77, 248, 255, 255, 255,
+  ]
+  let body = concat3(fmt, list, data_chunk([0, 0]))
+  let result = parse_wav(concat_arrays(riff_prefix(4 + body.length()), body))
+  assert_false(result.ok)
+  assert_eq(result.error.code(), "chunk-out-of-bounds")
+  assert_eq(result.error.offset, 48)
+}
+
+///|
+test "RIFF size delimits the file within a larger byte array" {
+  let fmt = fmt_chunk(1, 1, 8000, 16)
+  let prefix = concat_arrays(riff_prefix(4 + fmt.length()), fmt)
+  let result = parse_wav(concat_arrays(prefix, data_chunk([0, 0])))
+  assert_false(result.ok)
+  assert_eq(result.error.code(), "missing-data")
+}

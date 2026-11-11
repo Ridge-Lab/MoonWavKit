@@ -8,4 +8,5 @@ target
 bisect.coverage
 tmp/
 /submission/
+/docs/SUBMISSION.md
 /tools/create_proposal.py

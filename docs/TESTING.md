@@ -28,4 +28,4 @@ moon run examples/basic
 - 区段分析：静音段、普通信号段、响亮段、削波段、覆盖率和文本/CSV 报告。
 - 质量检查与 conformance fixture catalog。
 
-测试规模：72 个 MoonBit 测试。最近一次本地覆盖率摘要为 1412/1752 个可执行行（80.6%）；CLI 与示例另由 smoke step 直接运行。
+测试规模：76 个 MoonBit 测试。CI 对 Wasm 和 native 另执行 `python tools/verify_wav.py --target wasm` 或 `--target native`。它用 Python 标准库 wave 写入并回读 16 份不同位深、声道数和帧数的 PCM 文件，用 struct 构造 Float32 文件，再将文件参数传入实际 CLI 比对帧数、峰值和 RMS。8 个反例检查截断帧、顶层和嵌套块大小、RIFF 容器外的 data、文件读取和上限错误。

@@ -4,14 +4,14 @@
 
 MoonWavKit 是一个 MoonBit 原生 WAV 音频解析与 PCM 工具库，面向游戏资源检查、音频可视化、教学实验、WebAssembly 音频应用和自动化素材流水线。
 
-它不是播放器，也不依赖外部音频库；v0.1.4 聚焦 RIFF/WAVE 结构解析、PCM/Float 解码、音频统计、波形摘要、区段分析、质量检查、内置 fixture 验收矩阵和可复现示例。
+它不是播放器，也不依赖外部音频库；v0.1.5 聚焦 RIFF/WAVE 结构解析、PCM/Float 解码、音频统计、波形摘要、区段分析、质量检查、内置 fixture 验收矩阵和可复现示例。
 
 ## 发布与质量
 
-- 测试：72 个测试，覆盖解析、解码、统计、处理、校验、元数据、区段分析、质量检查和 fixture 矩阵。
+- 测试：76 个测试，覆盖解析、解码、统计、处理、校验、元数据、区段分析、质量检查和 fixture 矩阵。
 - 示例：`cmd/main` 和 `examples/basic` 均可运行。
 - CI：覆盖格式检查、全目标检查/构建/测试、覆盖率摘要、公开接口一致性和示例运行。
-- 发布：Mooncakes 包 `Ridge-Lab/moonwavkit@0.1.4`。
+- 发布：Mooncakes 包 `Ridge-Lab/moonwavkit@0.1.5`。
 - 许可证：MIT，属于 OSI 认可开源许可证。
 
 ## 支持范围
@@ -39,22 +39,24 @@ MoonWavKit 是一个 MoonBit 原生 WAV 音频解析与 PCM 工具库，面向�
 
 ## 兼容性
 
-- 2026-11-11 使用官方 stable 工具链验证 0.1.4。`moon version --all` 显示 `moonc v0.10.20+65efd5b93 (2026-11-05)`、`moon 0.1.20261104 (940aa18 2026-11-04)` 和 `moonrun 0.1.20261104 (940aa18 2026-11-04)`，功能标记为 `rr_moon_mod,rr_moon_pkg`。更新方法见[官方安装页](https://www.moonbitlang.com/download/)。
-- 0.1.4 使用当前编译器的 `#derive` 语法。使用 0.10.8 的现有工程可继续使用 0.1.3，升级到 0.1.4 时请同步升级工具链。
+- 2026-11-11 使用官方 stable 工具链验证了 0.1.4 和 0.1.5。`moon version --all` 显示 `moonc v0.10.20+65efd5b93 (2026-11-05)`、`moon 0.1.20261104 (940aa18 2026-11-04)` 和 `moonrun 0.1.20261104 (940aa18 2026-11-04)`，功能标记为 `rr_moon_mod,rr_moon_pkg`。更新方法见[官方安装页](https://www.moonbitlang.com/download/)。
+- 0.1.4 使用当前编译器的 `#derive` 语法。使用 0.10.8 的现有工程可继续使用 0.1.3，升级到 0.1.4 及以上时请同步升级工具链。
 - 默认目标：`wasm-gc`；CI 在 Ubuntu 上检查、构建、测试 `wasm`、`wasm-gc`、`js` 和 `native`。JS 示例需要 Node.js，native 构建需要系统 C 工具链。
 - 不依赖浏览器音频 API、系统音频设备或第三方音频库。
 - 输入由调用方以 `Array[Int]` 提供，库不负责文件系统读取或流式解码。
 
 ## 生态差异
 
-MoonBit 生态已有的相近包主要覆盖 WAV/OGG 编码、原生音频播放或设备绑定、DSP 引擎和音乐中间表示。MoonWavKit 不重复这些职责，专注可跨 Wasm/JavaScript/Native 使用的 RIFF/WAVE 输入链路：结构解析、PCM 解码、元数据、格式校验、波形与区段分析、质量报告及可复现 fixture。它既可以独立用于资源 CI，也可以作为播放器、游戏引擎和可视化工具的前置处理层。
+[bw448/moon-wav 0.3.0](https://mooncakes.io/docs/bw448/moon-wav) 也能读写 WAV，并提供重采样、音效、峰值和 RMS 分析。需要在编辑器中载入带标记的素材时，MoonWavKit 还能把 `LIST/INFO` 标签和 `cue ` 采样位置交给调用方。游戏资源导入器可以保留片段名称与定位点，质量检查可以标出削波发生的具体区段。
+
+可用 `fixture_with_info_and_cue()` 复核这一区别。我们用两个公开包解码同一份 PCM16 字节，并逐样本核对归一化结果。MoonWavKit 的 `info_tag_value(parsed.wav, "INAM")` 另外给出名称 `tone`，`cue_sample_offsets(parsed.wav)` 返回 `[2]`，在这个 8 kHz 文件中对应 0.25 ms。相关断言见[元数据测试](metadata_test.mbt)。
 
 ## 安装
 
 通过 Mooncakes 安装：
 
 ```bash
-moon add Ridge-Lab/moonwavkit@0.1.4
+moon add Ridge-Lab/moonwavkit@0.1.5
 ```
 
 本地开发：
@@ -82,7 +84,16 @@ test "parse decode analyze wav" {
 
 ## CLI 示例
 
-默认输出 text 报告：
+从仓库根目录检查实际文件（Wasm 使用 moonrun，native 使用系统 C 编译器）：
+
+```bash
+moon run cmd/wavinfo --target wasm -- --json "assets/intro.wav"
+moon run cmd/wavinfo --target native -- "assets/intro.wav"
+```
+
+`wavinfo` 接收一个不超过 16 MiB 的普通文件，一次读入并解码。成功时退出 0；JSON 报告包含帧数、位深、峰值和 RMS。文件无法读取、超过上限或验证失败时退出 1 并输出错误码。文件入口使用官方 core 的 async/fs，支持 Wasm 和 native；解析库仍支持四个后端。
+
+运行内置 fixture，默认输出 text 报告：
 
 ```bash
 moon run cmd/main

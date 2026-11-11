@@ -1,0 +1,14 @@
+import {
+  "Ridge-Lab/moonwavkit",
+  "moonbitlang/core/async",
+  "moonbitlang/core/async/fs",
+  "moonbitlang/core/env",
+}
+
+supported_targets = "-all+native+wasm"
+
+pkgtype(kind: "executable")
+
+options(
+  "allow-experimental-packages": true,
+)

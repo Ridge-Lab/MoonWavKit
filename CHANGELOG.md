@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.5
+
+- Added the Wasm/native wavinfo file command with text/JSON output, failure exits and a 16 MiB file limit.
+- Handle empty PCM and an unpadded odd final data chunk. Confine chunks to their RIFF/LIST extents and reject integer overflow before advancing.
+- Verify real PCM and Float32 files against Python's wave and struct in CI, including malformed length and truncation cases.
+
 ## 0.1.4
 
 - Updated trait derivations for moonc 0.10.20 and preserved public method calls for equality and debug representation.

@@ -94,7 +94,7 @@ pub fn ByteReader::remaining(self : ByteReader) -> Int32 {
 
 ///|
 pub fn ByteReader::can_read(self : ByteReader, count : Int32) -> Bool {
-  count >= 0 && self.offset >= 0 && self.offset + count <= self.bytes.length()
+  self.slice_can_read(self.offset, count)
 }
 
 ///|
@@ -103,7 +103,7 @@ pub fn ByteReader::slice_can_read(
   offset : Int32,
   count : Int32,
 ) -> Bool {
-  offset >= 0 && count >= 0 && offset + count <= self.bytes.length()
+  offset >= 0 && count >= 0 && count <= self.bytes.length() - offset
 }
 
 ///|
@@ -553,7 +553,7 @@ pub fn ParsedWav::is_complete(self : ParsedWav) -> Bool {
   self.header.is_valid() &&
   self.format.is_valid() &&
   self.data_offset > 0 &&
-  self.data_size > 0
+  self.data_size >= 0
 }
 
 ///|

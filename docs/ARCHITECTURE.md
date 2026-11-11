@@ -55,7 +55,7 @@ ByteReader -> parse_wav -> ParsedWav -> validate_wav_detailed
 
 ### Reporting and Conformance Layer
 
-报告模块提供 text、JSON 和 CSV 形式的稳定输出。conformance fixture catalog 将支持矩阵转化为可执行验收用例，CLI 和 CI 使用同一组 fixture 验证行为。
+报告模块提供 text、JSON 和 CSV 形式的稳定输出。conformance fixture catalog 将支持矩阵转化为可执行验收用例，内置示例和 CI 使用同一组 fixture 验证行为。磁盘入口 cmd/wavinfo 将文件内容交给同一个 build_report，跨实现检查从 Python wave 独立生成 PCM 文件。
 
 ## Core Invariants
 

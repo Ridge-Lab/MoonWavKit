@@ -65,3 +65,8 @@ jobs:
             grep -Fx 'frames=4' "$RUNNER_TEMP/basic.txt"
             grep -Fx 'fixture_catalog_passed=true' "$RUNNER_TEMP/basic.txt"
           done
+
+      - name: Compare real file output with Python wave and struct
+        run: |
+          python3 tools/verify_wav.py --target wasm
+          python3 tools/verify_wav.py --target native

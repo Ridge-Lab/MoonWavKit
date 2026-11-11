@@ -113,7 +113,7 @@ pub fn WavReport::to_json(self : WavReport) -> String {
   if !self.ok {
     "{ \"ok\": false, \"error\": \"\{self.error_code}\" }"
   } else {
-    "{ \"ok\": true, \"encoding\": \"\{self.encoding}\", \"channels\": \{self.channels}, \"sample_rate\": \{self.sample_rate}, \"bits_per_sample\": \{self.bits_per_sample}, \"frames\": \{self.frame_count}, \"quality\": \"\{self.quality}\" }"
+    "{ \"ok\": true, \"encoding\": \"\{self.encoding}\", \"channels\": \{self.channels}, \"sample_rate\": \{self.sample_rate}, \"bits_per_sample\": \{self.bits_per_sample}, \"frames\": \{self.frame_count}, \"peak\": \{self.peak}, \"rms\": \{self.rms}, \"quality\": \"\{self.quality}\" }"
   }
 }
 
