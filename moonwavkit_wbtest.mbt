@@ -95,3 +95,32 @@ test "RIFF size delimits the file within a larger byte array" {
   assert_false(result.ok)
   assert_eq(result.error.code(), "missing-data")
 }
+
+///|
+test "float WAV preserves finite bit patterns and silences nonfinite samples" {
+  let words : Array[Int32] = [
+    0x80000000, 0x00000001, 0x80000001, 0x3fc00000, 0xbf000000, 0x7f800000, 0xff800000,
+    0x7fc00001,
+  ]
+  let payload = Array::makei(words.length() * 4, i => {
+    (words[i / 4] >> (i % 4 * 8)) & 255
+  })
+  let body = concat_arrays(fmt_chunk(3, 1, 48000, 32), data_chunk(payload))
+  let bytes = concat_arrays(riff_prefix(4 + body.length()), body)
+  let raw = parse_and_decode(bytes, options=DecodeOptions::new(clamp=false))
+  assert_true(raw.ok)
+  let samples = raw.float_buffer.samples
+  assert_eq(samples[0].reinterpret_as_uint64(), 0x8000000000000000UL)
+  // The smallest binary32 subnormal is exactly 2^-149 in binary64.
+  assert_eq(samples[1].reinterpret_as_uint64(), 0x36a0000000000000UL)
+  assert_eq(samples[2].reinterpret_as_uint64(), 0xb6a0000000000000UL)
+  assert_eq(samples[3], 1.5)
+  assert_eq(samples[4], -0.5)
+  for i in 5..<8 {
+    assert_eq(samples[i], 0.0)
+    assert_eq(raw.pcm.samples[i], 0)
+  }
+  let limited = parse_and_decode(bytes, options=DecodeOptions::new(clamp=true))
+  assert_true(limited.ok)
+  assert_eq(limited.float_buffer.samples[3], 1.0)
+}

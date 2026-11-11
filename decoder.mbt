@@ -32,91 +32,48 @@ fn read_pcm_sample(reader : ByteReader, offset : Int32, bits : Int32) -> Int32 {
 }
 
 ///|
-fn pow2(exp : Int32) -> Double {
-  if exp == 0 {
-    1.0
-  } else if exp > 0 {
-    for _ in 0..<exp; value = 1.0 {
-      continue value * 2.0
-    } nobreak {
-      value
-    }
-  } else {
-    for _ in 0..<-exp; value = 1.0 {
-      continue value / 2.0
-    } nobreak {
-      value
-    }
-  }
-}
-
-///|
 fn decode_ieee_float32_bits(bits : Int32) -> Double {
-  let sign = if (bits & 0x80000000) != 0 { -1.0 } else { 1.0 }
-  let exponent = (bits >> 23) & 0xff
-  let fraction = bits & 0x7fffff
-  if exponent == 0 && fraction == 0 {
-    0.0 * sign
-  } else if exponent == 255 {
+  // Preserve the decoder's silence policy for NaN and infinity. Widening
+  // the reinterpreted Float retains all finite binary32 values and signed zero.
+  if (bits & 0x7f800000) == 0x7f800000 {
     0.0
-  } else if exponent == 0 {
-    sign * (fraction.to_double() / 8388608.0) * pow2(-126)
   } else {
-    sign * (1.0 + fraction.to_double() / 8388608.0) * pow2(exponent - 127)
+    Float::reinterpret_from_int(bits).to_double()
   }
 }
 
 ///|
-fn read_float32_sample(reader : ByteReader, offset : Int32) -> Double {
-  decode_ieee_float32_bits(reader.u32_le_at(offset))
-}
-
-///|
-fn decode_to_float_buffer(
+fn decode_samples(
   bytes : Array[Int32],
   wav : ParsedWav,
   options : DecodeOptions,
-) -> FloatBuffer {
+) -> DecodeResult {
   let reader = ByteReader::new(bytes)
-  let bytes_per_sample = wav.format.bytes_per_sample()
-  let sample_count = wav.data_size / bytes_per_sample
-  let samples = Array::makei(sample_count, i => {
-    let offset = wav.data_offset + i * bytes_per_sample
-    let value = if wav.format.is_float() {
-      read_float32_sample(reader, offset)
+  let width = wav.format.bytes_per_sample()
+  let count = wav.data_size / width
+  let pcm = Array::make(count, 0)
+  let floats = Array::make(count, 0.0)
+  let is_float = wav.format.is_float()
+  for i in 0..<count {
+    let offset = wav.data_offset + i * width
+    if is_float {
+      let value = decode_ieee_float32_bits(reader.u32_le_at(offset))
+      pcm[i] = (value * 2147483647.0).round().to_int()
+      floats[i] = if options.clamp { clamp_unit(value) } else { value }
     } else {
-      normalize_pcm_sample(
-        read_pcm_sample(reader, offset, wav.format.bits_per_sample),
-        wav.format.bits_per_sample,
-      )
+      let sample = read_pcm_sample(reader, offset, wav.format.bits_per_sample)
+      pcm[i] = sample
+      floats[i] = normalize_pcm_sample(sample, wav.format.bits_per_sample)
     }
-    if options.clamp {
-      clamp_unit(value)
-    } else {
-      value
-    }
-  })
-  FloatBuffer::new(wav.format.channels, wav.format.sample_rate, samples)
-}
-
-///|
-fn decode_to_pcm_buffer(bytes : Array[Int32], wav : ParsedWav) -> PcmBuffer {
-  let reader = ByteReader::new(bytes)
-  let bytes_per_sample = wav.format.bytes_per_sample()
-  let sample_count = wav.data_size / bytes_per_sample
-  let samples = Array::makei(sample_count, i => {
-    let offset = wav.data_offset + i * bytes_per_sample
-    if wav.format.is_float() {
-      (read_float32_sample(reader, offset) * 2147483647.0).round().to_int()
-    } else {
-      read_pcm_sample(reader, offset, wav.format.bits_per_sample)
-    }
-  })
-  PcmBuffer::new(
-    wav.format.channels,
-    wav.format.sample_rate,
-    wav.format.bits_per_sample,
-    samples,
+  }
+  DecodeResult::success(
+    PcmBuffer::new(
+      wav.format.channels,
+      wav.format.sample_rate,
+      wav.format.bits_per_sample,
+      pcm,
+    ),
+    FloatBuffer::new(wav.format.channels, wav.format.sample_rate, floats),
   )
 }
 
@@ -162,10 +119,7 @@ pub fn decode_pcm(
       WavError::new(ErrorTruncatedData, "data chunk has partial frame"),
     )
   } else {
-    DecodeResult::success(
-      decode_to_pcm_buffer(bytes, wav),
-      decode_to_float_buffer(bytes, wav, options),
-    )
+    decode_samples(bytes, wav, options)
   }
 }
 
