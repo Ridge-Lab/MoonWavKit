@@ -30,6 +30,19 @@ moon run examples/basic
 
 测试规模：77 个 MoonBit 测试。CI 对 Wasm 和 native 另执行 `python tools/verify_wav.py --target wasm` 或 `--target native`。它用 Python 标准库 wave 写入并回读 16 份不同位深、声道数和帧数的 PCM 文件，用 struct 构造 Float32 文件，再将文件参数传入实际 CLI 比对帧数、峰值和 RMS。8 个反例检查截断帧、顶层和嵌套块大小、RIFF 容器外的 data、文件读取和上限错误。
 
+## 下游兼容性
+
+在临时目录分别检出 [BoxRIR 的固定提交](https://github.com/zhangbowen2006/BoxRIR/tree/6949c70d6f83edbc9bc785630f5e3ec523bd8444)和 [MoonEcho 的固定提交](https://github.com/lin2077-zeming/MoonEcho/tree/a279b61a1ddfe2ca38dbdd5c2ce30be1cbe0a113)。两者的 `moon.mod` 均声明使用 MoonWavKit 0.1.3。要复核升级兼容性，只将清单中的 `Ridge-Lab/moonwavkit@0.1.3` 改为 `Ridge-Lab/moonwavkit@0.1.5`，保留其余依赖、源码和测试，然后在各项目根目录执行：
+
+```sh
+moon version --all
+moon test --target wasm
+```
+
+2026-11-12 用 moonc `0.10.20+65efd5b93` 和发布包 0.1.5 复跑，BoxRIR 的 31 项测试全部通过。其中一项用 Float32 WAV 往返写读 `[0.0, 2.5, -3.0, 0.125]`。房间声学计算需要保留这个动态范围，按单位振幅截断将导致该断言失败。[下游原始断言](https://github.com/zhangbowen2006/BoxRIR/blob/6949c70d6f83edbc9bc785630f5e3ec523bd8444/io/wav_wbtest.mbt#L1-L10)
+
+同一环境中，MoonEcho 的 38 项测试全部通过。另在 MoonEcho 根目录运行 `moon run examples/wav-adapter --target wasm`，其 WAV 输入经过解码、混音与重采样后输出单声道、16 kHz、6 帧。[音频输入测试](https://github.com/lin2077-zeming/MoonEcho/blob/a279b61a1ddfe2ca38dbdd5c2ce30be1cbe0a113/src/audio/audio_test.mbt)
+
 ## Float32 解码基准
 
 `moon bench --target js -p Ridge-Lab/moonwavkit -f decoder_bench_wbtest.mbt` 解码一秒、48 kHz 的单声道 Float32 音频，同时生成整数和浮点两个缓冲区。构造样本和解析 RIFF 在计时前完成。CI 运行同一基准并校验输出，耗时只供比较。

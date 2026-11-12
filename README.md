@@ -51,6 +51,13 @@ MoonWavKit 是一个 MoonBit 原生 WAV 音频解析与 PCM 工具库，面向�
 
 可用 `fixture_with_info_and_cue()` 复核这一区别。我们用两个公开包解码同一份 PCM16 字节，并逐样本核对归一化结果。MoonWavKit 的 `info_tag_value(parsed.wav, "INAM")` 另外给出名称 `tone`，`cue_sample_offsets(parsed.wav)` 返回 `[2]`，在这个 8 kHz 文件中对应 0.25 ms。相关断言见[元数据测试](metadata_test.mbt)。
 
+## 哪些项目在用
+
+- MoonEcho 将 WAV 解码为 PCM，混成单声道并重采样，作为音频指纹检索的输入。它发布的 0.1.4 声明依赖 MoonWavKit 0.1.3。[音频预处理源码](https://github.com/lin2077-zeming/MoonEcho/blob/a279b61a1ddfe2ca38dbdd5c2ce30be1cbe0a113/src/audio/audio.mbt)
+- BoxRIR 为房间声学仿真读取 WAV 声源。它用 `parse_wav` 检查格式，再以 `clamp=false` 解码，保留输入振幅。它发布的 0.3.0 声明依赖 MoonWavKit 0.1.3。[声源读取源码](https://github.com/zhangbowen2006/BoxRIR/blob/6949c70d6f83edbc9bc785630f5e3ec523bd8444/io/wav.mbt)
+
+我们在两个项目的独立副本中把依赖升到 0.1.5，分别跑通了 MoonEcho 的 38 项和 BoxRIR 的 31 项 Wasm 测试。[复现步骤](docs/TESTING.md#下游兼容性)
+
 ## 安装
 
 通过 Mooncakes 安装：
