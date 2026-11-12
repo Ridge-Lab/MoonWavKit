@@ -4,14 +4,14 @@
 
 MoonWavKit 是一个 MoonBit 原生 WAV 音频解析与 PCM 工具库，面向游戏资源检查、音频可视化、教学实验、WebAssembly 音频应用和自动化素材流水线。
 
-它不是播放器，也不依赖外部音频库；v0.1.5 聚焦 RIFF/WAVE 结构解析、PCM/Float 解码、音频统计、波形摘要、区段分析、质量检查、内置 fixture 验收矩阵和可复现示例。
+对于长录音，可以边读 RIFF/WAVE 文件边取得整帧 PCM 样本，计算峰值、RMS 或将音频交给指纹检索程序。需要标签、定位点或区段质量报告时，也提供整文件解析接口。
 
 ## 发布与质量
 
-- 测试：77 个测试，覆盖解析、解码、统计、处理、校验、元数据、区段分析、质量检查和 fixture 矩阵。
+- 测试覆盖解析、整文件和分块解码、统计、元数据、区段分析与质量检查。
 - 示例：`cmd/main` 和 `examples/basic` 均可运行。
 - CI：覆盖格式检查、全目标检查/构建/测试、覆盖率摘要、公开接口一致性和示例运行。
-- 发布：Mooncakes 包 `Ridge-Lab/moonwavkit@0.1.5`。
+- Mooncakes 包为 `Ridge-Lab/moonwavkit@0.2.0`。
 - 许可证：MIT，属于 OSI 认可开源许可证。
 
 ## 支持范围
@@ -39,11 +39,11 @@ MoonWavKit 是一个 MoonBit 原生 WAV 音频解析与 PCM 工具库，面向�
 
 ## 兼容性
 
-- 2026-11-11 使用官方 stable 工具链验证了 0.1.4 和 0.1.5。`moon version --all` 显示 `moonc v0.10.20+65efd5b93 (2026-11-05)`、`moon 0.1.20261104 (940aa18 2026-11-04)` 和 `moonrun 0.1.20261104 (940aa18 2026-11-04)`，功能标记为 `rr_moon_mod,rr_moon_pkg`。更新方法见[官方安装页](https://www.moonbitlang.com/download/)。
+- 0.2.0 复现环境为 2026-11-12 核验的官方 stable 工具链。`moon version --all` 显示 `moonc v0.10.20+65efd5b93 (2026-11-05)`、`moon 0.1.20261104 (940aa18 2026-11-04)` 和 `moonrun 0.1.20261104 (940aa18 2026-11-04)`，功能标记为 `rr_moon_mod,rr_moon_pkg`。[官方安装页](https://www.moonbitlang.com/download/)
 - 0.1.4 使用当前编译器的 `#derive` 语法。使用 0.10.8 的现有工程可继续使用 0.1.3，升级到 0.1.4 及以上时请同步升级工具链。
 - 默认目标：`wasm-gc`；CI 在 Ubuntu 上检查、构建、测试 `wasm`、`wasm-gc`、`js` 和 `native`。JS 示例需要 Node.js，native 构建需要系统 C 工具链。
 - 不依赖浏览器音频 API、系统音频设备或第三方音频库。
-- 输入由调用方以 `Array[Int]` 提供，库不负责文件系统读取或流式解码。
+- 调用方可传入完整的 `Array[Int]`，也可用 `WavStreamDecoder` 连续传入多个 `Bytes` 块。块可以从头部或一帧音频的中间断开。
 
 ## 生态差异
 
@@ -52,6 +52,8 @@ MoonWavKit 是一个 MoonBit 原生 WAV 音频解析与 PCM 工具库，面向�
 可用 `fixture_with_info_and_cue()` 复核这一区别。我们用两个公开包解码同一份 PCM16 字节，并逐样本核对归一化结果。MoonWavKit 的 `info_tag_value(parsed.wav, "INAM")` 另外给出名称 `tone`，`cue_sample_offsets(parsed.wav)` 返回 `[2]`，在这个 8 kHz 文件中对应 0.25 ms。相关断言见[元数据测试](metadata_test.mbt)。
 
 ## 哪些项目在用
+
+要复现分块解码对真实录音的影响，可运行[长录音 MoonEcho 指纹对照](integrations/moonecho/README.md)。同一章 10 分 40 秒的朗读，用两个独立进程生成了逐字节相同的 161 条指纹，实测峰值工作集分别为全量 237.4 MiB、分块 26.8 MiB。
 
 - MoonEcho 将 WAV 解码为 PCM，混成单声道并重采样，作为音频指纹检索的输入。它发布的 0.1.4 声明依赖 MoonWavKit 0.1.3。[音频预处理源码](https://github.com/lin2077-zeming/MoonEcho/blob/a279b61a1ddfe2ca38dbdd5c2ce30be1cbe0a113/src/audio/audio.mbt)
 - BoxRIR 为房间声学仿真读取 WAV 声源。它用 `parse_wav` 检查格式，再以 `clamp=false` 解码，保留输入振幅。它发布的 0.3.0 声明依赖 MoonWavKit 0.1.3。[声源读取源码](https://github.com/zhangbowen2006/BoxRIR/blob/6949c70d6f83edbc9bc785630f5e3ec523bd8444/io/wav.mbt)
@@ -63,7 +65,7 @@ MoonWavKit 是一个 MoonBit 原生 WAV 音频解析与 PCM 工具库，面向�
 通过 Mooncakes 安装：
 
 ```bash
-moon add Ridge-Lab/moonwavkit@0.1.5
+moon add Ridge-Lab/moonwavkit@0.2.0
 ```
 
 本地开发：
@@ -96,9 +98,10 @@ test "parse decode analyze wav" {
 ```bash
 moon run cmd/wavinfo --target wasm -- --json "assets/intro.wav"
 moon run cmd/wavinfo --target native -- "assets/intro.wav"
+moon run cmd/wavinfo --target wasm --release -- --stream "recordings/chapter.wav"
 ```
 
-`wavinfo` 接收一个不超过 16 MiB 的普通文件，一次读入并解码。成功时退出 0；JSON 报告包含帧数、位深、峰值和 RMS。文件无法读取、超过上限或验证失败时退出 1 并输出错误码。文件入口使用官方 core 的 async/fs，支持 Wasm 和 native；解析库仍支持四个后端。
+默认模式和 `--json` 接收不超过 16 MiB 的普通文件，生成完整报告。`--stream` 每次从文件读取最多 64 KiB，输出包含帧数、位深、峰值和 RMS 的 JSON。解析期间只累计统计量，内存用量与录音时长无关。成功时退出 0，读取或解码失败时退出 1 并输出错误码。文件入口支持 Wasm 和 native。[分块 API 与输入边界](docs/API.md#分块解码)
 
 运行内置 fixture，默认输出 text 报告：
 

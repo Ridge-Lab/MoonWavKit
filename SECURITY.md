@@ -1,10 +1,10 @@
 # Security Policy
 
-MoonWavKit parses untrusted RIFF/WAVE byte arrays without file-system or network access. All chunk reads are bounds-checked, unknown chunks are skipped, and malformed or unsupported input is reported through stable error values.
+MoonWavKit accepts RIFF/WAVE byte arrays and sequential byte blocks. It checks chunk extents and frame alignment. The streaming decoder uses 64-bit offsets for unsigned RIFF lengths and writes complete PCM frames to the caller's callback.
 
 ## Supported Versions
 
-Security and correctness fixes are applied to the latest published `0.1.x` release.
+Security and correctness fixes are applied to the latest published release.
 
 ## Reporting
 
@@ -12,4 +12,4 @@ Report a suspected vulnerability through the repository's GitHub security adviso
 
 ## Scope
 
-Resource limits for file acquisition, upload size, concurrency, and storage remain the responsibility of the host application. MoonWavKit does not open paths, access audio devices, stream data, or execute embedded metadata.
+The core library receives its bytes from the caller. The optional `wavinfo` CLI opens a local regular file. The host application controls input size, concurrency, and the lifetime of output blocks. Use `finish` to detect truncated input even when earlier blocks have been delivered.

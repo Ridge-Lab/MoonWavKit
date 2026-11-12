@@ -1,0 +1,12 @@
+import {
+  "Ridge-Lab/moonwavkit" @wav,
+  "lin2077-zeming/moonecho/src/fingerprint" @fp,
+  "lin2077-zeming/moonecho/src/spectrum" @spectrum,
+  "moonbitlang/core/async",
+  "moonbitlang/core/async/fs",
+  "moonbitlang/core/encoding/base64",
+  "moonbitlang/core/env",
+}
+supported_targets = "-all+wasm+native"
+pkgtype(kind: "executable")
+options("allow-experimental-packages": true)

@@ -63,7 +63,7 @@ ByteReader -> parse_wav -> ParsedWav -> validate_wav_detailed
 - `WaveFormat.block_align` 必须等于声道数乘以每采样字节数；
 - `WaveFormat.byte_rate` 必须等于采样率乘以 block align；
 - data chunk 必须落在输入字节数组范围内并包含完整帧；
-- 公共解析和解码错误通过 `WavError` 返回，不依赖异常文本；
+- 整文件解析和解码通过 `WavError` 返回错误。分块解码抛出 `WavStreamError`，两个入口均使用 `WavErrorKind` 标识错误类别。
 - 未支持的格式返回明确错误，不使用近似解码或静默降级。
 
 ## Complexity
@@ -73,7 +73,7 @@ ByteReader -> parse_wav -> ParsedWav -> validate_wav_detailed
 - 统计、波形和区段分析：单次扫描或有限次线性扫描；
 - 线性重采样和混音：与输出帧数线性相关。
 
-MoonWavKit 面向已经完整载入内存的素材文件。上传大小、并发、存储和流式读取的资源限制由宿主应用负责。
+整文件 API 接收已载入内存的素材。`WavStreamDecoder` 用 64 位位置跟踪 RIFF 末端和当前块末端，收集短头部或一批整帧 PCM，跳过其他负载。它与整文件解码器共用样本读取、归一化和浮点转换，只有回调正在消费的输出批次需要保留。宿主应用决定读取块大小、并发数和回调输出的生命周期。
 
 ## Extension Rules
 

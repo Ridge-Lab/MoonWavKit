@@ -32,6 +32,28 @@
 - `target_channels=0` 保留源声道；也可以显式填写源声道数。其他值会返回 `invalid-argument`，声道转换不会被静默执行。
 - `decode_pcm` 会重新校验 `ParsedWav` 的 data 边界，传入不匹配或截断的字节数组会返回 `truncated-data`。
 
+## 分块解码
+
+`WavStreamDecoder::new(clamp=true)` 接收顺序到达的 RIFF/WAVE 字节。调用方可以直接把文件读出的各块交给解码器。
+
+```moonbit
+fn count_frames(chunks : Array[Bytes]) -> Int64 raise @moonwavkit.WavStreamError {
+  let decoder = @moonwavkit.WavStreamDecoder::new()
+  let mut frames = 0L
+  for chunk in chunks {
+    decoder.feed(chunk, block => frames += block.frame_count().to_int64())
+  }
+  ignore(decoder.finish())
+  frames
+}
+```
+
+回调收到的 `FloatBuffer` 拥有自己的交错声道样本，每批最多 2,048 帧且对应最多 64 KiB 的源 PCM。消费完即释放即可按固定空间处理长文件。若调用方保存所有块，调用方的内存仍按时长增长。整数归一化和 Float32 的有限值、NaN、无穷值处理与 `decode_pcm` 一致，`clamp=false` 保留超单位范围的有限浮点数。
+
+`feed` 可以接收空块。它跨输入块拼合头部和数据，跳过带填充的附加块。`finish` 核实容器完整性并返回格式，包括零帧文件。错误携带 `WavErrorKind`、64 位字节位置和原因，解码器会保留首次流格式错误。EOF 或尾部块可能在若干音频块已经交付后才触发错误，需要原子交付的调用方应在 `finish` 成功后提交结果。
+
+支持一个 `fmt ` 后跟一个 `data` 的小端 RIFF/WAVE，遵守 32 位 RIFF 长度并兼容末尾奇数字节 `data` 省略填充。只处理第一个 RIFF 容器，超出容器的尾随字节不参与解码。附加块只校验顶层长度，不提取或解析 INFO、cue 等内部元数据。RF64、多段 wavl、压缩音频和 extensible 格式超出当前支持范围。
+
 ## Analyze
 
 `analyze_audio(buffer)` 计算 duration、frame count、sample count、peak、RMS、静音样本、削波样本和 DC offset。
@@ -83,4 +105,4 @@
 
 ## Format Boundary
 
-支持 PCM 8/16/24/32-bit 和 IEEE Float32 的 RIFF/WAVE 文件。解析器识别 `fmt `、`data`、`fact`、`LIST/INFO` 与 `cue `，并保留未知 chunk 的标识和边界。压缩编码、RF64、完整 WAVE_FORMAT_EXTENSIBLE、文件系统读取、流式解码和播放不属于 v0.1 API。
+支持 PCM 8/16/24/32-bit 和 IEEE Float32 的 RIFF/WAVE 文件。整文件解析器识别 `fmt `、`data`、`fact`、`LIST/INFO` 与 `cue `，并保留未知 chunk 的标识和边界。`cmd/wavinfo` 负责文件访问。

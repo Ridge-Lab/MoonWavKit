@@ -4,6 +4,8 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+  release:
+    types: [published]
 
 permissions:
   contents: read
@@ -73,3 +75,11 @@ jobs:
 
       - name: Run Float32 decoder benchmark
         run: moon bench --target js -p Ridge-Lab/moonwavkit -f decoder_bench_wbtest.mbt
+
+      - name: Install the released package in fresh consumers
+        if: github.event_name == 'release'
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          moon update
+          python3 tools/verify_published.py --tag "$RELEASE_TAG" --work-dir "$RUNNER_TEMP"

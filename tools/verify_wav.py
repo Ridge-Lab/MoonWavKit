@@ -29,9 +29,9 @@ def check_audio(report, channels, rate, width, values, encoding):
 
 
 def run(target, project):
-    def invoke(path, ok):
+    def invoke(path, ok, mode="--json"):
         result = subprocess.run(
-            ["moon", "run", "cmd/wavinfo", "--target", target, "--", "--json", str(path)],
+            ["moon", "run", "cmd/wavinfo", "--release", "--target", target, "--", mode, str(path)],
             cwd=project, capture_output=True, text=True, timeout=30,
         )
         assert result.returncode == (0 if ok else 1), (path, result.returncode, result.stderr, result.stdout)
@@ -58,6 +58,7 @@ def run(target, project):
                                  - (128 if width == 1 else 0)) / scale for i in range(0, len(data), width)]
                         check_audio(invoke(path, True), wav.getnchannels(), wav.getframerate(),
                                     wav.getsampwidth(), vals, "pcm")
+                        check_audio(invoke(path, True, "--stream"), channels, 22050, width, vals, "pcm")
                     count += 1
 
         fmt = chunk(b"fmt ", struct.pack("<HHIIHH", 3, 1, 48000, 192000, 4, 32))
@@ -65,6 +66,7 @@ def run(target, project):
         audio = chunk(b"data", samples)
         path.write_bytes(riff(fmt + chunk(b"JUNK", b"abc") + audio) + chunk(b"data", bytes(8)))
         check_audio(invoke(path, True), 1, 48000, 4, struct.unpack("<5f", samples), "ieee-float")
+        check_audio(invoke(path, True, "--stream"), 1, 48000, 4, struct.unpack("<5f", samples), "ieee-float")
 
         invalid = [
             (riff(fmt + b"data" + struct.pack("<I", 0x7fff_ffff)), "chunk-out-of-bounds"),
@@ -84,7 +86,24 @@ def run(target, project):
         with path.open("wb") as output:
             output.truncate(16 * 1024 * 1024 + 1)
         assert invoke(path, False) == {"ok": False, "error": "input-limit"}
-        print(f"{target}: {count} wave PCM files, 1 struct float file, {len(invalid)+2} rejection cases passed")
+
+        # 17 MiB of PCM, generated without materializing the recording in Python.
+        # A whole-file report refuses it; the bounded reader checks every frame.
+        pattern = struct.pack("<4h", -32768, 16384, 0, -8192)
+        block = pattern * 8192
+        with wave.open(str(path), "wb") as wav:
+            wav.setparams((2, 2, 16000, 0, "NONE", "not compressed"))
+            for _ in range(272):
+                wav.writeframesraw(block)
+        assert invoke(path, False) == {"ok": False, "error": "input-limit"}
+        long_report = invoke(path, True, "--stream")
+        assert long_report["ok"] and long_report["frames"] == 272 * len(block) // 4, long_report
+        assert long_report["peak"] == 1.0 and math.isclose(
+            long_report["rms"], math.sqrt((1 + 0.25 + 0.0625) / 4), rel_tol=1e-12), long_report
+        with path.open("r+b") as wav:
+            wav.truncate(path.stat().st_size - 1)
+        assert invoke(path, False, "--stream") == {"ok": False, "error": "truncated-data"}
+        print(f"{target}: {count} PCM files and Float32 via both CLIs, malformed inputs and 17 MiB stream passed")
 
 
 if __name__ == "__main__":

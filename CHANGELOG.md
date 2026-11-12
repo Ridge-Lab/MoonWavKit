@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.0
+
+- Decode sequential RIFF/WAVE PCM and IEEE Float32 input into owned, frame-aligned blocks with a bounded buffer. The new `wavinfo --stream FILE` command calculates frame count, peak and RMS on recordings larger than the full-report size limit.
+- Detect wrapped format byte rates and check EOF, chunk order and data alignment in the stream reader. The CLI is exercised against Python wave/struct examples, a 17 MiB signal and truncated input.
+
 ## 0.1.5
 
 - Added the Wasm/native wavinfo file command with text/JSON output, failure exits and a 16 MiB file limit.

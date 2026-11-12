@@ -417,7 +417,8 @@ pub fn WaveFormat::is_valid(self : WaveFormat) -> Bool {
   self.block_align > 0 &&
   self.bits_per_sample > 0 &&
   self.expected_block_align() == self.block_align &&
-  self.expected_byte_rate() == self.byte_rate
+  self.sample_rate.to_int64() * self.block_align.to_int64() ==
+  self.byte_rate.to_int64()
 }
 
 ///|

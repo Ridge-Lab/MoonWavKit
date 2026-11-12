@@ -177,6 +177,9 @@ pub fn zero_crossing_count(FloatBuffer) -> Int32
 pub fn zero_crossing_rate(FloatBuffer) -> Double
 
 // Errors
+pub(all) suberror WavStreamError {
+  InvalidStream(WavErrorKind, Int64, String)
+}
 
 // Types and methods
 #derive(Eq, @debug.Debug)
@@ -871,6 +874,13 @@ pub fn WavReport::render(Self, ReportFormat) -> String
 pub fn WavReport::to_json(Self) -> String
 pub fn WavReport::to_repr(Self) -> @debug.Repr
 pub fn WavReport::to_text(Self) -> String
+
+pub struct WavStreamDecoder {
+  // private fields
+}
+pub fn WavStreamDecoder::feed(Self, Bytes, (FloatBuffer) -> Unit) -> Unit raise WavStreamError
+pub fn WavStreamDecoder::finish(Self) -> WaveFormat raise WavStreamError
+pub fn WavStreamDecoder::new(clamp? : Bool) -> Self
 
 #derive(Eq, @debug.Debug)
 pub(all) struct WaveChunk {
